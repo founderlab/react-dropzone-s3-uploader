@@ -8,7 +8,9 @@ For more detailed docs see these:
 ##### Usage (client): 
 
 ```javascript
-render() {
+import DropzoneS3Uploader from 'react-dropzone-s3-uploader'
+
+function MyComponent() {
   const style = {
     height: 200,
     border: 'dashed 2px #999',
@@ -35,16 +37,15 @@ render() {
 
 Use s3Router from react-s3-uploader to get signed urls for uploads.
 See https://github.com/odysseyscience/react-s3-uploader for more details.
+react-dropzone-s3-uploader/s3router can be used as an alias for react-s3-uploader/s3router.
 
 ```javascript
-import {s3Router} from 'react-dropzone-s3-uploader'
-app.use('/s3', s3Router({
+app.use('/s3', require('react-dropzone-s3-uploader/s3router')({
     bucket: "MyS3Bucket",
     region: 'us-east-1', //optional
     headers: {'Access-Control-Allow-Origin': '*'}, // optional
     ACL: 'private' // this is default
 }));
-
 ```
 
 
@@ -65,5 +66,4 @@ style, activeStyle, rejectStyle: Styles to be passed to react-dropzone
 imageStyle: Style object for the preview image
 
 onError, onProgress, onFinish: Callbacks for the respective events
-
 ```
