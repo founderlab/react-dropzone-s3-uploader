@@ -6,9 +6,13 @@ import Dropzone from 'react-dropzone'
 export default class DropzoneS3Uploader extends React.Component {
 
   static propTypes = {
-    url: PropTypes.string.isRequired,
+    host: PropTypes.string,
     s3_url: PropTypes.string,
     s3Url: PropTypes.string,
+    signing_url: PropTypes.string,
+    signingUrl: PropTypes.string,
+
+    headers: PropTypes.object,
     multiple: PropTypes.bool,
     filename: PropTypes.string,
     max_file_size: PropTypes.number,
@@ -22,23 +26,29 @@ export default class DropzoneS3Uploader extends React.Component {
     image_style: PropTypes.object,
     imageStyle: PropTypes.object,
 
+    on_error: PropTypes.func,
     onError: PropTypes.func,
+    on_progress: PropTypes.func,
     onProgress: PropTypes.func,
+    on_finish: PropTypes.func,
     onFinish: PropTypes.func,
   }
 
   onProgress = (progress) => {
-    if (this.props.onProgress) this.props.onProgress(progress)
+    const progFn = this.props.on_progress || this.props.onProgress
+    if (progFn) progFn(progress)
     this.setState({progress})
   }
 
   onError = (err) => {
-    if (this.props.onError) this.props.onError(progress)
+    const errFn = this.props.on_error || this.props.onError
+    if (errFn) errFn(err)
     this.setState({error: err})
   }
 
   onFinish = (info) => {
-    if (this.props.onFinish) this.props.onFinish(info)
+    const finFn = this.props.on_finish || this.props.onFinish
+    if (finFn) finFn(info)
     this.setState({filename: info.filename, error: null, progress: null})
   }
 
@@ -58,15 +68,15 @@ export default class DropzoneS3Uploader extends React.Component {
     this.setState({error})
     if (error) return
 
-    new S3Upload({                                            // eslint-disable-line
+    new S3Upload({ // eslint-disable-line
       files,
-      signingUrl: '/s3/sign',
+      signingUrl: this.props.signing_url || this.props.signingUrl || '/s3/sign',
       onProgress: this.onProgress,
       onFinishS3Put: this.onFinish,
       onError: this.onError,
-      uploadRequestHeaders: {'x-amz-acl': 'public-read'},
+      uploadRequestHeaders: this.props.headers || {'x-amz-acl': 'public-read'},
       contentDisposition: 'auto',
-      server: this.props.url || '/',
+      server: this.props.host || '',
     })
 
   }
