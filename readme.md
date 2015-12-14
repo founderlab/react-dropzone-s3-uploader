@@ -4,9 +4,7 @@ For more detailed docs see these:
 https://github.com/paramaggarwal/react-dropzone
 https://github.com/odysseyscience/react-s3-uploader
 
-##### Usage: 
-
-Client: 
+##### Usage (client): 
 
 ```javascript
 render() {
@@ -32,7 +30,7 @@ render() {
 
 ```
 
-Server: 
+##### Usage (server): 
 
 Use s3Router from react-s3-uploader to get signed urls for uploads.
 See https://github.com/odysseyscience/react-s3-uploader for more details.
@@ -49,7 +47,7 @@ app.use('/s3', s3Router({
 ```
 
 
-Available options:
+##### Available options: 
 (All camelCase options also work as underscored_names. e.g. maxFileSize and max_file_size are both fine)
 
 ```
