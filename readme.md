@@ -3,6 +3,7 @@
 For more detailed docs see these:
 
 https://github.com/paramaggarwal/react-dropzone
+
 https://github.com/odysseyscience/react-s3-uploader
 
 ##### Usage (client): 
