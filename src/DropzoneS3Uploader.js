@@ -12,6 +12,7 @@ export default class DropzoneS3Uploader extends React.Component {
     signing_url: PropTypes.string,
     signingUrl: PropTypes.string,
 
+    children: PropTypes.node,
     headers: PropTypes.object,
     multiple: PropTypes.bool,
     filename: PropTypes.string,
@@ -115,7 +116,7 @@ export default class DropzoneS3Uploader extends React.Component {
 
     return (
       <Dropzone onDrop={this.handleDrop} {...dropzone_props} >
-        <h4 className="text-center">upload</h4>
+        {this.props.children}
 
         {image_url ? (<img src={image_url} style={image_style} />) : null}
         {progress ? (<ProgressBar now={progress} label="%(percent)s%" srOnly />) : null}

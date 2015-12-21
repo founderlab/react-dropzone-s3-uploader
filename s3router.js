@@ -1,0 +1,1 @@
+module.exports = require('react-s3-uploader/s3router')
