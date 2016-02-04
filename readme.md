@@ -1,9 +1,14 @@
 # Drag and drop s3 file uploader via react-dropzone + react-s3-uploader
 
-For more detailed docs see these:
+#####For more detailed docs see these:
+
 - https://github.com/paramaggarwal/react-dropzone
 - https://github.com/odysseyscience/react-s3-uploader
 
+#####Changes: 
+
+- 0.4.0: Supports a display component via a child element
+- 0.3.1: Readme
 
 ##### Usage (client): 
 
@@ -66,4 +71,14 @@ style, activeStyle, rejectStyle: Styles to be passed to react-dropzone
 imageStyle: Style object for the preview image
 
 onError, onProgress, onFinish: Callbacks for the respective events
+```
+
+##### Custom display component: 
+Specify your own display for an uploaded file. Will receive these props:
+```{file_url, s3_url, filename, progress, error, image_style,
+    fileUrl: file_url, s3Url: s3_url, imageStyle: image_style}```
+```javascript
+<DropzoneS3Uploader onFinish={this.handleFinishedUpload} {...uploader_props}>
+  <CustomElement />
+</DropzoneS3Uploader>
 ```

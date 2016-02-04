@@ -12,7 +12,7 @@ export default class DropzoneS3Uploader extends React.Component {
     signing_url: PropTypes.string,
     signingUrl: PropTypes.string,
 
-    children: PropTypes.node,
+    children: PropTypes.element,
     headers: PropTypes.object,
     multiple: PropTypes.bool,
     filename: PropTypes.string,
@@ -27,30 +27,31 @@ export default class DropzoneS3Uploader extends React.Component {
     image_style: PropTypes.object,
     imageStyle: PropTypes.object,
 
-    on_error: PropTypes.func,
     onError: PropTypes.func,
-    on_progress: PropTypes.func,
     onProgress: PropTypes.func,
-    on_finish: PropTypes.func,
     onFinish: PropTypes.func,
   }
 
   onProgress = (progress) => {
-    const progFn = this.props.on_progress || this.props.onProgress
+    const progFn = this.props.onProgress
     if (progFn) progFn(progress)
     this.setState({progress})
   }
 
   onError = (err) => {
-    const errFn = this.props.on_error || this.props.onError
+    const errFn = this.props.onError
     if (errFn) errFn(err)
     this.setState({error: err})
   }
 
   onFinish = (info) => {
-    const finFn = this.props.on_finish || this.props.onFinish
+    const finFn = this.props.onFinish
     if (finFn) finFn(info)
     this.setState({filename: info.filename, error: null, progress: null})
+  }
+
+  static isImage(filename) {
+    return filename && filename.match(/\.(jpeg|jpg|gif|png)/)
   }
 
   handleDrop = (files) => {
@@ -86,7 +87,7 @@ export default class DropzoneS3Uploader extends React.Component {
     const state = this.state || {filename: this.props.filename}
     const {filename, progress, error} = state
     const s3_url = this.props.s3_url || this.props.s3Url
-    const image_url = filename ? `${s3_url}/${filename}` : null
+    const file_url = filename ? `${s3_url}/${filename}` : null
 
     const dropzone_props = {
       style: this.props.style || {
@@ -114,14 +115,29 @@ export default class DropzoneS3Uploader extends React.Component {
       height: '100%',
     }
 
+    let contents = null
+    if (this.props.children) {
+      contents = React.cloneElement(React.Children.only(this.props.children), {
+        file_url, s3_url, filename, progress, error, image_style,
+        fileUrl: file_url, s3Url: s3_url, imageStyle: image_style,
+      })
+    }
+    else if (file_url) {
+      if (DropzoneS3Uploader.isImage(file_url)) {
+        contents = (<img src={file_url} style={image_style} />)
+      }
+      else {
+        contents = (<div><span className="glyphicon glyphicon-file" style={{fontSize: '50px'}} />{filename}</div>)
+      }
+    }
+
     return (
       <Dropzone onDrop={this.handleDrop} {...dropzone_props} >
-        {this.props.children}
-
-        {image_url ? (<img src={image_url} style={image_style} />) : null}
+        {contents}
         {progress ? (<ProgressBar now={progress} label="%(percent)s%" srOnly />) : null}
         {error ? (<small>{error}</small>) : null}
       </Dropzone>
     )
   }
 }
+
