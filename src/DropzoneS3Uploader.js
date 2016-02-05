@@ -15,6 +15,7 @@ export default class DropzoneS3Uploader extends React.Component {
     children: PropTypes.element,
     headers: PropTypes.object,
     multiple: PropTypes.bool,
+    accept: PropTypes.string,
     filename: PropTypes.string,
     max_file_size: PropTypes.number,
     maxFileSize: PropTypes.number,
@@ -54,7 +55,7 @@ export default class DropzoneS3Uploader extends React.Component {
     return filename && filename.match(/\.(jpeg|jpg|gif|png)/)
   }
 
-  handleDrop = (files) => {
+  handleDrop = files => {
     let error = null
     const size = files[0].size
     const max_file_size = this.props.max_file_size || this.props.maxFileSize
@@ -106,6 +107,7 @@ export default class DropzoneS3Uploader extends React.Component {
         backgroundColor: '#ffdddd',
       },
       multiple: this.props.multiple || false,
+      accept: this.props.accept,
     }
 
     const image_style = this.props.image_style || this.props.imageStyle || {
