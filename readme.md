@@ -7,6 +7,7 @@
 
 #####Changes: 
 
+- 0.4.1: Pass accept prop to Dropzone
 - 0.4.0: Supports a display component via a child element
 - 0.3.1: Readme
 
