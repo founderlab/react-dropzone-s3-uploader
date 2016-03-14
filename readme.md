@@ -28,7 +28,7 @@ function MyComponent() {
   const uploader_props = {
     style, 
     max_file_size: 1024 * 1024 * 50, 
-    url: 'https://example/com', 
+    host: 'https://example/com', 
     s3_url: 'https://my-bucket.s3.amazonaws.com/', 
   }
 
