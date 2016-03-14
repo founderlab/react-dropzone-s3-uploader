@@ -7,6 +7,7 @@ export default class DropzoneS3Uploader extends React.Component {
 
   static propTypes = {
     host: PropTypes.string,
+    server: PropTypes.string,
     s3_url: PropTypes.string,
     s3Url: PropTypes.string,
     signing_url: PropTypes.string,
@@ -79,7 +80,7 @@ export default class DropzoneS3Uploader extends React.Component {
       onError: this.onError,
       uploadRequestHeaders: this.props.headers || {'x-amz-acl': 'public-read'},
       contentDisposition: 'auto',
-      server: this.props.host || '',
+      server: this.props.server || this.props.host || '',
     })
 
   }

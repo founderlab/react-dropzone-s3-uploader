@@ -28,7 +28,7 @@ function MyComponent() {
   const uploader_props = {
     style, 
     max_file_size: 1024 * 1024 * 50, 
-    host: 'https://example/com', 
+    server: 'https://example/com', 
     s3_url: 'https://my-bucket.s3.amazonaws.com/', 
   }
 
@@ -59,7 +59,7 @@ app.use('/s3', require('react-dropzone-s3-uploader/s3router')({
 (All camelCase options also work as underscored_names. e.g. maxFileSize and max_file_size are both fine)
 
 ```
-url: your host
+server: your servers url if different to the current domain
 s3Url: your s3 base url
 signingUrl: The path on your server to your s3 signed url generator (see the server section above)
 
