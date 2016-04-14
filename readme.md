@@ -31,6 +31,7 @@ function MyComponent() {
     max_file_size: 1024 * 1024 * 50, 
     server: 'https://example/com', 
     s3_url: 'https://my-bucket.s3.amazonaws.com/', 
+    signing_url_query_params: {upload_type: 'avatar'},
   }
 
   return (
@@ -48,7 +49,7 @@ react-dropzone-s3-uploader/s3router can be used as an alias for react-s3-uploade
 
 ```javascript
 app.use('/s3', require('react-dropzone-s3-uploader/s3router')({
-    bucket: "MyS3Bucket",
+    bucket: 'MyS3Bucket',
     region: 'us-east-1', //optional
     headers: {'Access-Control-Allow-Origin': '*'}, // optional
     ACL: 'private' // this is default
@@ -63,6 +64,7 @@ app.use('/s3', require('react-dropzone-s3-uploader/s3router')({
 server: your servers url if different to the current domain
 s3Url: your s3 base url
 signingUrl: The path on your server to your s3 signed url generator (see the server section above)
+signingUrlQueryParams: Query params to add when making a request to the signing url
 
 headers: headers to send to your s3 signed url generator
 multiple: Allow more than one file
