@@ -7,6 +7,7 @@
 
 #####Changes: 
 
+- 0.5.0: react-bootstrap dependency updated to ^0.29.0. New minor to avoid breaking things.
 - 0.4.2: Rename `host` option to `server` to match react-s3-uploader
 - 0.4.1: Pass accept prop to Dropzone
 - 0.4.0: Supports a display component via a child element
