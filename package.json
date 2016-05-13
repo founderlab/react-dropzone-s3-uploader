@@ -19,6 +19,7 @@
     "test": "eval $(cat test/.env) mocha test/**/*.tests.js"
   },
   "dependencies": {
+    "babel-runtime": "^6.6.1",
     "react-s3-uploader": "^1.2.1",
     "react-dropzone": "^3.2.2"
   },
