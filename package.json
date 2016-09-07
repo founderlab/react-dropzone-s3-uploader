@@ -24,7 +24,7 @@
     "react-dropzone": "^3.2.2"
   },
   "peerDependencies": {
-    "react": "^0.14.0",
+    "react": "^0.14.0 || ^15.0.0",
     "react-bootstrap": "^0.29.0"
   },
   "devDependencies": {

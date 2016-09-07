@@ -1,6 +1,8 @@
 
 ## [Unreleased]
   
+## [0.5.3]
+  - Update React dependecy to include 15.x.x
 
 ## [0.5.0]
   - react-bootstrap dependency updated to ^0.29.0
