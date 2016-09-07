@@ -1,0 +1,7 @@
+.DS_Store
+.idea/
+.tmp/
+bower_components/
+node_modules/
+npm-debug.log
+.babelrc
