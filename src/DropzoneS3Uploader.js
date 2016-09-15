@@ -1,5 +1,4 @@
 import React, {PropTypes} from 'react'
-import {ProgressBar} from 'react-bootstrap'
 import S3Upload from 'react-s3-uploader/s3upload'
 import Dropzone from 'react-dropzone'
 
@@ -15,6 +14,7 @@ export default class DropzoneS3Uploader extends React.Component {
     signing_url_query_params: PropTypes.object,
     signingUrlQueryParams: PropTypes.object,
 
+    progressBar: PropTypes.node,
     children: PropTypes.element,
     headers: PropTypes.object,
     multiple: PropTypes.bool,
@@ -90,7 +90,7 @@ export default class DropzoneS3Uploader extends React.Component {
 
   render() {
     const state = this.state || {filename: this.props.filename}
-    const {filename, progress, error} = state
+    const {filename, progress, progressBar, error} = state
     const s3_url = this.props.s3_url || this.props.s3Url
     const file_url = filename ? `${s3_url}/${filename}` : null
 
@@ -140,7 +140,7 @@ export default class DropzoneS3Uploader extends React.Component {
     return (
       <Dropzone onDrop={this.handleDrop} {...dropzone_props} >
         {contents}
-        {progress ? (<ProgressBar now={progress} label="%(percent)s%" srOnly />) : null}
+        {progress && progressBar}
         {error ? (<small>{error}</small>) : null}
       </Dropzone>
     )
