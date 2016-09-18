@@ -1,6 +1,14 @@
 
 ## [Unreleased]
   
+## [0.7.0]
+  - Removed dependency on react-bootstrap
+  - New props: 
+    - `progressComponent`, a react component to render progress. Is provided a prop called `progress` with the current uploader progress percentage as an int (1-100).
+    - `fileComponent` prop to do the same for rendering an uploaded file (not an image).
+    - `isImage` a function that should return true if a filename represents an image. Default is `filename => filename && filename.match(/\.(jpeg|jpg|gif|png|svg)/i)`
+  - If a child component is present it's only passed these props: `fileUrl, s3Url, filename, progress, error, imageStyle`
+
 ## [0.5.3]
   - Update React dependecy to include 15.x.x
 
