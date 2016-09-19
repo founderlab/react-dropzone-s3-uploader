@@ -22,7 +22,7 @@ export default class DropzoneS3Uploader extends React.Component {
     multiple: PropTypes.bool,
     accept: PropTypes.string,
     filename: PropTypes.string,
-    maxFileSize: PropTypes.number,
+    max_file_size: PropTypes.number,
     maxFileSize: PropTypes.number,
 
     style: PropTypes.object,
@@ -30,7 +30,7 @@ export default class DropzoneS3Uploader extends React.Component {
     activeStyle: PropTypes.object,
     reject_style: PropTypes.object,
     rejectStyle: PropTypes.object,
-    imageStyle: PropTypes.object,
+    image_style: PropTypes.object,
     imageStyle: PropTypes.object,
 
     onError: PropTypes.func,

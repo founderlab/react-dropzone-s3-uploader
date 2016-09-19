@@ -24,27 +24,28 @@ function MyComponent() {
     cursor: 'pointer',
   }
 
-  const uploader_props = {
+  const uploaderProps = {
     style, 
-    max_file_size: 1024 * 1024 * 50, 
+    maxFileSize: 1024 * 1024 * 50, 
     server: 'https://example/com', 
-    s3_url: 'https://my-bucket.s3.amazonaws.com/', 
-    signing_url_query_params: {upload_type: 'avatar'},
+    s3Url: 'https://my-bucket.s3.amazonaws.com/', 
+    signingUrlQueryParams: {uploadType: 'avatar'},
   }
 
   return (
-    <DropzoneS3Uploader onFinish={this.handleFinishedUpload} {...uploader_props} />
+    <DropzoneS3Uploader onFinish={this.handleFinishedUpload} {...uploaderProps} />
   )
 }
 
 ```
+
 
 Usage (server): 
 ---------------
 
 Use s3Router from react-s3-uploader to get signed urls for uploads.
 See https://github.com/odysseyscience/react-s3-uploader for more details.
-react-dropzone-s3-uploader/s3router can be used as an alias for react-s3-uploader/s3router.
+`react-dropzone-s3-uploader/s3router` can be used as an alias for `react-s3-uploader/s3router`.
 
 ```javascript
 app.use('/s3', require('react-dropzone-s3-uploader/s3router')({
@@ -77,13 +78,13 @@ imageStyle: Style object for the preview image
 onError, onProgress, onFinish: Callbacks for the respective events
 ```
 
+
 Custom display component: 
 -------------------------
 Specify your own display for an uploaded file. Will receive these props:
-```{file_url, s3_url, filename, progress, error, image_style,
-    fileUrl: file_url, s3Url: s3_url, imageStyle: image_style}```
+```{fileUrl, s3Url, filename, progress, error, imageStyle}```
 ```javascript
-<DropzoneS3Uploader onFinish={this.handleFinishedUpload} {...uploader_props}>
+<DropzoneS3Uploader onFinish={this.handleFinishedUpload} {...uploaderProps}>
   <CustomElement />
 </DropzoneS3Uploader>
 ```
