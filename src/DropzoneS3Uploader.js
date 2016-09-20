@@ -8,7 +8,7 @@ export default class DropzoneS3Uploader extends React.Component {
     host: PropTypes.string,
     server: PropTypes.string,
     s3Url: PropTypes.string,
-    s3Url: PropTypes.string,
+    s3_url: PropTypes.string,
     signing_url: PropTypes.string,
     signingUrl: PropTypes.string,
     signing_url_query_params: PropTypes.object,
