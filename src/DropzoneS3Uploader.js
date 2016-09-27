@@ -77,7 +77,7 @@ export default class DropzoneS3Uploader extends React.Component {
   onError = err => {
     const errFn = this.props.onError
     if (errFn) errFn(err)
-    this.setState({error: err})
+    this.setState({error: err, progress: null})
   }
 
   onFinish = (info) => {
