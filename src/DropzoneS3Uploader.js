@@ -16,6 +16,7 @@ export default class DropzoneS3Uploader extends React.Component {
 
     fileComponent: PropTypes.func,
     progressComponent: PropTypes.func,
+    onDrop: PropTypes.func,
 
     children: PropTypes.element,
     headers: PropTypes.object,
@@ -41,6 +42,7 @@ export default class DropzoneS3Uploader extends React.Component {
   static defaultProps = {
     className: 'react-dropzone-s3-uploader',
     multiple: false,
+    onDrop: function() {},
     isImage: filename => filename && filename.match(/\.(jpeg|jpg|gif|png|svg)/i),
     style: {
       width: 200,
@@ -67,6 +69,8 @@ export default class DropzoneS3Uploader extends React.Component {
       height: 'auto',
     },
   }
+
+
 
   onProgress = (progress) => {
     const progFn = this.props.onProgress
@@ -113,7 +117,7 @@ export default class DropzoneS3Uploader extends React.Component {
       contentDisposition: 'auto',
       server: this.props.server || this.props.host || '',
     })
-
+    this.props.onDrop(files)
   }
 
   renderFileComponent = ({filename}) => (<div><span className="glyphicon glyphicon-file" style={{fontSize: '50px'}} />{filename}</div>)
