@@ -13,9 +13,9 @@
     "url": "https://github.com/founderlab/react-dropzone-s3-uploader"
   },
   "scripts": {
-    "prepublish": "rm -rf ./lib && babel ./src --ignore '/node_modules/' --out-dir ./lib",
-    "build": "rm -rf ./lib && babel ./src --ignore '/node_modules/' --out-dir ./lib",
-    "watch": "rm -rf ./lib && babel ./src --ignore '/node_modules/' --watch --out-dir ./lib",
+    "prepublish": "rm -rf ./lib && ./node_modules/babel/bin/babel.js ./src --ignore '/node_modules/' --out-dir ./lib",
+    "build": "rm -rf ./lib && ./node_modules/babel/bin/babel.js ./src --ignore '/node_modules/' --out-dir ./lib",
+    "watch": "rm -rf ./lib && ./node_modules/babel/bin/babel.js ./src --ignore '/node_modules/' --watch --out-dir ./lib",
     "test": "eval $(cat test/.env) mocha test/**/*.tests.js"
   },
   "dependencies": {
