@@ -42,7 +42,6 @@ export default class DropzoneS3Uploader extends React.Component {
   static defaultProps = {
     className: 'react-dropzone-s3-uploader',
     multiple: false,
-    onDrop: function() {},
     isImage: filename => filename && filename.match(/\.(jpeg|jpg|gif|png|svg)/i),
     style: {
       width: 200,
@@ -70,23 +69,18 @@ export default class DropzoneS3Uploader extends React.Component {
     },
   }
 
-
-
-  onProgress = (progress) => {
-    const progFn = this.props.onProgress
-    if (progFn) progFn(progress)
+  onProgress = progress => {
+    this.props.onProgress && this.props.onProgress(progress)
     this.setState({progress})
   }
 
   onError = err => {
-    const errFn = this.props.onError
-    if (errFn) errFn(err)
+    this.props.onError && this.props.onError(err)
     this.setState({error: err, progress: null})
   }
 
-  onFinish = (info) => {
-    const finFn = this.props.onFinish
-    if (finFn) finFn(info)
+  onFinish = info => {
+    this.props.onFinish && this.props.onFinish(info)
     this.setState({filename: info.filename, error: null, progress: null})
   }
 
@@ -103,8 +97,7 @@ export default class DropzoneS3Uploader extends React.Component {
       const maxSizeKB = (maxFileSize / 1024 / 1024).toFixed(2)
       error = `Files must be smaller than ${maxSizeKB}KB. Yours is ${sizeKB}KB`
     }
-    this.setState({error})
-    if (error) return
+    if (error) return this.onError(error)
 
     new S3Upload({ // eslint-disable-line
       files,
@@ -117,7 +110,8 @@ export default class DropzoneS3Uploader extends React.Component {
       contentDisposition: 'auto',
       server: this.props.server || this.props.host || '',
     })
-    this.props.onDrop(files)
+
+    this.props.onDrop && this.props.onDrop(files)
   }
 
   renderFileComponent = ({filename}) => (<div><span className="glyphicon glyphicon-file" style={{fontSize: '50px'}} />{filename}</div>)
