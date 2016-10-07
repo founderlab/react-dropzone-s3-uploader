@@ -1,6 +1,9 @@
 
 ## [Unreleased]
   
+## [0.7.3]
+  - Accepts an prop named `onDrop`, a function to be called with the files object when files are dropped.
+
 ## [0.7.0]
   - Removed dependency on react-bootstrap
   - New props: 
