@@ -80,8 +80,7 @@ export default class DropzoneS3Uploader extends React.Component {
   }
 
   onFinish = info => {
-    this.props.onFinish && this.props.onFinish(info)
-    this.setState({filename: info.filename, error: null, progress: null})
+    this.setState({filename: info.filename, error: null, progress: null}, () => this.props.onFinish && this.props.onFinish(info))
   }
 
   handleDrop = files => {
