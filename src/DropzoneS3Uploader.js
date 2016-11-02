@@ -13,6 +13,8 @@ export default class DropzoneS3Uploader extends React.Component {
     signingUrl: PropTypes.string,
     signing_url_query_params: PropTypes.object,
     signingUrlQueryParams: PropTypes.object,
+    signing_url_headers: PropTypes.object,
+    signingUrlHeaders: PropTypes.object,
 
     fileComponent: PropTypes.func,
     progressComponent: PropTypes.func,
@@ -102,6 +104,7 @@ export default class DropzoneS3Uploader extends React.Component {
       files,
       signingUrl: this.props.signing_url || this.props.signingUrl || '/s3/sign',
       signingUrlQueryParams: this.props.signing_url_query_params || this.props.signingUrlQueryParams || {},
+      signingUrlHeaders: this.props.signing_url_headers || this.props.signingUrlHeaders || {},
       onProgress: this.onProgress,
       onFinishS3Put: this.onFinish,
       onError: this.onError,
