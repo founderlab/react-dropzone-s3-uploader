@@ -141,7 +141,7 @@ export default class DropzoneS3Uploader extends React.Component {
 
     let contents = null
     if (this.props.children) {
-      contents = React.cloneElement(React.Children.only(this.props.children), childProps)
+      contents = this.props.children
     }
     else if (fileUrl) {
       if (this.props.isImage(fileUrl)) {
