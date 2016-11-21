@@ -15,10 +15,18 @@ export default class DropzoneS3Uploader extends React.Component {
     signingUrlQueryParams: PropTypes.object,
     signing_url_headers: PropTypes.object,
     signingUrlHeaders: PropTypes.object,
+    className: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.array,
+    ]),
 
     fileComponent: PropTypes.func,
     progressComponent: PropTypes.func,
     onDrop: PropTypes.func,
+    onError: PropTypes.func,
+    onProgress: PropTypes.func,
+    onFinish: PropTypes.func,
+    isImage: PropTypes.func,
 
     children: PropTypes.element,
     headers: PropTypes.object,
@@ -27,6 +35,8 @@ export default class DropzoneS3Uploader extends React.Component {
     filename: PropTypes.string,
     max_file_size: PropTypes.number,
     maxFileSize: PropTypes.number,
+    min_file_size: PropTypes.number,
+    minFileSize: PropTypes.number,
 
     style: PropTypes.object,
     active_style: PropTypes.object,
@@ -35,10 +45,8 @@ export default class DropzoneS3Uploader extends React.Component {
     rejectStyle: PropTypes.object,
     image_style: PropTypes.object,
     imageStyle: PropTypes.object,
-
-    onError: PropTypes.func,
-    onProgress: PropTypes.func,
-    onFinish: PropTypes.func,
+    disable_click: PropTypes.bool,
+    disableClick: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -82,23 +90,14 @@ export default class DropzoneS3Uploader extends React.Component {
   }
 
   onFinish = info => {
-    this.setState({filename: info.filename, error: null, progress: null}, () => this.props.onFinish && this.props.onFinish(info))
+    const filenames = this.state.filenames || []
+    const filename = info.filename
+    filenames.push(filename)
+    this.setState({filename, filenames, error: null, progress: null}, () => this.props.onFinish && this.props.onFinish(info))
   }
 
-  handleDrop = files => {
-    let error = null
-    const size = files[0].size
-    const maxFileSize = this.props.max_file_size || this.props.maxFileSize
-
-    if (!this.props.multiple && files.length > 1) {
-      error = `Only drop one file`
-    }
-    else if (maxFileSize && size > maxFileSize) {
-      const sizeKB = (size / 1024 / 1024).toFixed(2)
-      const maxSizeKB = (maxFileSize / 1024 / 1024).toFixed(2)
-      error = `Files must be smaller than ${maxSizeKB}KB. Yours is ${sizeKB}KB`
-    }
-    if (error) return this.onError(error)
+  handleDrop = (files, rejectedFiles) => {
+    this.setState({filenames: [], filename: null, error: null, progress: null})
 
     new S3Upload({ // eslint-disable-line
       files,
@@ -113,7 +112,7 @@ export default class DropzoneS3Uploader extends React.Component {
       server: this.props.server || this.props.host || '',
     })
 
-    this.props.onDrop && this.props.onDrop(files)
+    this.props.onDrop && this.props.onDrop(files, rejectedFiles)
   }
 
   renderFileComponent = ({filename}) => (<div><span className="glyphicon glyphicon-file" style={{fontSize: '50px'}} />{filename}</div>)
@@ -121,9 +120,10 @@ export default class DropzoneS3Uploader extends React.Component {
   render() {
     const state = this.state || {filename: this.props.filename}
     const {className, style, multiple, accept} = this.props
-    const {filename, progress, error} = state
+    const {filename, filenames, progress, error} = state
     const s3Url = this.props.s3Url || this.props.s3_url
     const fileUrl = filename ? `${s3Url}/${filename}` : null
+    const fileUrls = filenames ? _.map(filenames, filename => `${s3Url}/${filename}`) : null
     const ProgressComponent = this.props.progressComponent
     const FileComponent = this.props.fileComponent || this.renderFileComponent
 
@@ -132,12 +132,15 @@ export default class DropzoneS3Uploader extends React.Component {
       style,
       multiple,
       accept,
+      disableClick: this.props.disable_click || this.props.disableClick,
       activeStyle: this.props.active_style || this.props.activeStyle,
       rejectStyle: this.props.reject_style || this.props.rejectStyle,
+      minSize: this.props.min_file_size || this.props.minFileSize,
+      maxSize: this.props.max_file_size || this.props.maxFileSize,
     }
 
     const imageStyle = this.props.image_style || this.props.imageStyle
-    const childProps = {fileUrl, s3Url, filename, progress, error, imageStyle}
+    const childProps = {fileUrl, fileUrls, s3Url, filename, filenames, progress, error, imageStyle}
 
     let contents = null
     if (this.props.children) {

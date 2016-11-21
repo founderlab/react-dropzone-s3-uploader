@@ -1,6 +1,11 @@
 
 ## [Unreleased]
   
+## [0.8.0]
+  - props.children no longer receive the `fileUrl`, `s3Url`, `filename`, `progress`, `error`, `imageStyle` props. If the `fileComponent` prop is specified it will receive these props. 
+  - maxFileSize and minFileSize are passed to the `react-dropzone` component, which handles validation
+  - multiple files are handled better. Props named `fileUrls` and `filenames` are passed to the `fileComponent`, with an entry per file uploaded.
+
 ## [0.7.3]
   - Accepts an prop named `onDrop`, a function to be called with the files object when files are dropped.
 
