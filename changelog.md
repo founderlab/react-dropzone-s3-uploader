@@ -1,6 +1,9 @@
 
 ## [Unreleased]
   
+## [0.8.1]
+  - Fix bug caused by using _.map without importing it
+
 ## [0.8.0]
   - props.children no longer receive the `fileUrl`, `s3Url`, `filename`, `progress`, `error`, `imageStyle` props. If the `fileComponent` prop is specified it will receive these props. 
   - maxFileSize and minFileSize are passed to the `react-dropzone` component, which handles validation
