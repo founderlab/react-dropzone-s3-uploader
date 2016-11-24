@@ -19,8 +19,9 @@
     "test": "eval $(cat test/.env) mocha test/**/*.tests.js"
   },
   "dependencies": {
-    "react-s3-uploader": "^1.2.1",
-    "react-dropzone": "^3.7.3"
+    "lodash": "^4.17.2",
+    "react-dropzone": "^3.7.3",
+    "react-s3-uploader": "^1.2.1"
   },
   "peerDependencies": {
     "react": "^0.14.0 || ^15.0.0"
