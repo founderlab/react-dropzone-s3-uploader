@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react'
 import S3Upload from 'react-s3-uploader/s3upload'
 import Dropzone from 'react-dropzone'
+import map from 'lodash/map'
 
 export default class DropzoneS3Uploader extends React.Component {
 
@@ -123,7 +124,7 @@ export default class DropzoneS3Uploader extends React.Component {
     const {filename, filenames, progress, error} = state
     const s3Url = this.props.s3Url || this.props.s3_url
     const fileUrl = filename ? `${s3Url}/${filename}` : null
-    const fileUrls = filenames ? _.map(filenames, filename => `${s3Url}/${filename}`) : null
+    const fileUrls = filenames ? map(filenames, filename => `${s3Url}/${filename}`) : null
     const ProgressComponent = this.props.progressComponent
     const FileComponent = this.props.fileComponent || this.renderFileComponent
 
