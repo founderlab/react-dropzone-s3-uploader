@@ -77,7 +77,7 @@ Available options:
   <li> imageStyle: Style object for the preview image</li>
 </ul>
 <ul>
-  <li> onError, onProgress, onFinish: Callbacks for the respective events</li>
+  <li> onError, onProgress, onFinish, preprocess: Callbacks for the respective events</li>
 </ul>
 <ul>
   <li> ProgressComponent: A React component to place while the image is being uploaded. It requires that an onProgress callback had been defined.
