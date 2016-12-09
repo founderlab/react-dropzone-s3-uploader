@@ -47,6 +47,7 @@ export default class DropzoneS3Uploader extends React.Component {
     imageStyle: PropTypes.object,
     disable_click: PropTypes.bool,
     disableClick: PropTypes.bool,
+    hideErrorMessage: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -126,6 +127,7 @@ export default class DropzoneS3Uploader extends React.Component {
     const fileUrls = filenames ? filenames.map(filename => `${s3Url}/${filename}`) : null
     const ProgressComponent = this.props.progressComponent
     const FileComponent = this.props.fileComponent || this.renderFileComponent
+    const hideErrorMessage = this.props.hideErrorMessage || false
 
     const dropzoneProps = {
       className,
@@ -159,7 +161,7 @@ export default class DropzoneS3Uploader extends React.Component {
       <Dropzone onDrop={this.handleDrop} {...dropzoneProps} >
         {contents}
         {progress && ProgressComponent ? (<ProgressComponent progress={progress} />) : null}
-        {error ? (<small>{error}</small>) : null}
+        {error && !hideErrorMessage ? (<small>{error}</small>) : null}
       </Dropzone>
     )
   }
