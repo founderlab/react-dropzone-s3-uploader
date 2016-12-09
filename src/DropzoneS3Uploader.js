@@ -26,6 +26,7 @@ export default class DropzoneS3Uploader extends React.Component {
     onError: PropTypes.func,
     onProgress: PropTypes.func,
     onFinish: PropTypes.func,
+    preprocess: PropTypes.func,
     isImage: PropTypes.func,
 
     children: PropTypes.element,
@@ -99,7 +100,7 @@ export default class DropzoneS3Uploader extends React.Component {
   handleDrop = (files, rejectedFiles) => {
     this.setState({filenames: [], filename: null, error: null, progress: null})
 
-    new S3Upload({ // eslint-disable-line
+    const options = {
       files,
       signingUrl: this.props.signing_url || this.props.signingUrl || '/s3/sign',
       signingUrlQueryParams: this.props.signing_url_query_params || this.props.signingUrlQueryParams || {},
@@ -107,10 +108,15 @@ export default class DropzoneS3Uploader extends React.Component {
       onProgress: this.onProgress,
       onFinishS3Put: this.onFinish,
       onError: this.onError,
+      preprocess: this.props.preprocess,
       uploadRequestHeaders: this.props.headers || {'x-amz-acl': 'public-read'},
       contentDisposition: 'auto',
       server: this.props.server || this.props.host || '',
-    })
+    }
+
+    if (this.props.preprocess) options.preprocess = this.props.preprocess
+
+    new S3Upload(options) // eslint-disable-line
 
     this.props.onDrop && this.props.onDrop(files, rejectedFiles)
   }

@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "react-dropzone": "^3.7.3",
-    "react-s3-uploader": "^1.2.1"
+    "react-s3-uploader": "^3.0.3"
   },
   "peerDependencies": {
     "react": "^0.14.0 || ^15.0.0"
