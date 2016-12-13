@@ -52,6 +52,13 @@ export default class DropzoneS3Uploader extends React.Component {
   }
 
   static defaultProps = {
+    uploaderOptions: {},
+    signingUrl: '/s3/sign',
+    headers: {'x-amz-acl': 'public-read'},
+    contentDisposition: 'auto',
+    signingUrlQueryParams: {},
+    signingUrlHeaders: {},
+
     className: 'react-dropzone-s3-uploader',
     multiple: false,
     isImage: filename => filename && filename.match(/\.(jpeg|jpg|gif|png|svg)/i),
@@ -101,19 +108,21 @@ export default class DropzoneS3Uploader extends React.Component {
   handleDrop = (files, rejectedFiles) => {
     this.setState({filenames: [], filename: null, error: null, progress: null})
 
-    const options = {
+    const options = Object.assign({
       files,
-      signingUrl: this.props.signing_url || this.props.signingUrl || '/s3/sign',
-      signingUrlQueryParams: this.props.signing_url_query_params || this.props.signingUrlQueryParams || {},
-      signingUrlHeaders: this.props.signing_url_headers || this.props.signingUrlHeaders || {},
+      signingUrl: this.props.signing_url || this.props.signingUrl,
+      signingUrlQueryParams: this.props.signing_url_query_params || this.props.signingUrlQueryParams,
+      signingUrlHeaders: this.props.signing_url_headers || this.props.signingUrlHeaders,
+
+      uploadRequestHeaders: this.props.headers,
+      contentDisposition: this.props.contentDisposition,
+
       onProgress: this.onProgress,
       onFinishS3Put: this.onFinish,
       onError: this.onError,
-      preprocess: this.props.preprocess,
-      uploadRequestHeaders: this.props.headers || {'x-amz-acl': 'public-read'},
-      contentDisposition: 'auto',
+
       server: this.props.server || this.props.host || '',
-    }
+    }, this.props.uploaderOptions)
 
     if (this.props.preprocess) options.preprocess = this.props.preprocess
 

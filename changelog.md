@@ -1,6 +1,10 @@
 
 ## [Unreleased]
   
+## [0.9.0]
+  - Upgraded `react-s3-uploader` to v3.3.0
+  - Added some props: `uploaderOptions` and `preprocess`
+
 ## [0.8.1]
   - Fix bug caused by using _.map without importing it
 

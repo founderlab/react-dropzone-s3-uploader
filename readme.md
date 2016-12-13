@@ -59,7 +59,7 @@ app.use('/s3', require('react-dropzone-s3-uploader/s3router')({
 
 Available options:
 ------------------
-(All camelCase options also work as underscored_names. e.g. maxFileSize and max_file_size are both fine)
+
 <ul>
   <li> server: your servers url if different to the current domain</li>
   <li> s3Url: your s3 base url</li>
@@ -78,6 +78,9 @@ Available options:
 </ul>
 <ul>
   <li> onError, onProgress, onFinish, preprocess: Callbacks for the respective events</li>
+</ul>
+<ul>
+  <li> uploaderOptions: Any additional options to be passed to the S3Upload instance</li>
 </ul>
 <ul>
   <li> ProgressComponent: A React component to place while the image is being uploaded. It requires that an onProgress callback had been defined.
