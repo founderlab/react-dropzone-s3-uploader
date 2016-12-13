@@ -82,6 +82,9 @@ Available options:
 <ul>
   <li> ProgressComponent: A React component to place while the image is being uploaded. It requires that an onProgress callback had been defined.
 </ul>
+<ul>
+  <li> hideErrorMessage: Do not show errors inside this component.
+</ul>
 
 Custom display component: 
 -------------------------
