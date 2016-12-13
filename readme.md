@@ -9,7 +9,7 @@ For more detailed docs see these:
 
 
 
-Usage (client): 
+Usage (client):
 ---------------
 
 ```javascript
@@ -25,10 +25,10 @@ function MyComponent() {
   }
 
   const uploaderProps = {
-    style, 
-    maxFileSize: 1024 * 1024 * 50, 
-    server: 'https://example/com', 
-    s3Url: 'https://my-bucket.s3.amazonaws.com/', 
+    style,
+    maxFileSize: 1024 * 1024 * 50,
+    server: 'https://example/com',
+    s3Url: 'https://my-bucket.s3.amazonaws.com/',
     signingUrlQueryParams: {uploadType: 'avatar'},
   }
 
@@ -40,7 +40,7 @@ function MyComponent() {
 ```
 
 
-Usage (server): 
+Usage (server):
 ---------------
 
 Use s3Router from react-s3-uploader to get signed urls for uploads.
@@ -57,7 +57,7 @@ app.use('/s3', require('react-dropzone-s3-uploader/s3router')({
 ```
 
 
-Available options: 
+Available options:
 ------------------
 (All camelCase options also work as underscored_names. e.g. maxFileSize and max_file_size are both fine)
 <ul>
@@ -77,7 +77,7 @@ Available options:
   <li> imageStyle: Style object for the preview image</li>
 </ul>
 <ul>
-  <li> onError, onProgress, onFinish: Callbacks for the respective events</li>
+  <li> onError, onProgress, onFinish, preprocess: Callbacks for the respective events</li>
 </ul>
 <ul>
   <li> ProgressComponent: A React component to place while the image is being uploaded. It requires that an onProgress callback had been defined.
@@ -86,7 +86,7 @@ Available options:
   <li> hideErrorMessage: Do not show errors inside this component.
 </ul>
 
-Custom display component: 
+Custom display component:
 -------------------------
 Specify your own display for an uploaded file. Will receive these props:
 ```{fileUrl, s3Url, filename, progress, error, imageStyle}```
