@@ -89,8 +89,8 @@ export default class DropzoneS3Uploader extends React.Component {
     },
   }
 
-  onProgress = progress => {
-    this.props.onProgress && this.props.onProgress(progress)
+  onProgress = (progress, textState, file) => {
+    this.props.onProgress && this.props.onProgress(progress, textState, file)
     this.setState({progress})
   }
 
@@ -99,11 +99,14 @@ export default class DropzoneS3Uploader extends React.Component {
     this.setState({error: err, progress: null})
   }
 
-  onFinish = info => {
+  onFinish = (info, file) => {
     const filenames = this.state.filenames || []
-    const filename = info.filename
+    const filename = file.name
     filenames.push(filename)
-    this.setState({filename, filenames, error: null, progress: null}, () => this.props.onFinish && this.props.onFinish(info))
+    this.setState(
+      {filename, filenames, error: null, progress: null},
+      () => this.props.onFinish && this.props.onFinish(info, file)
+    )
   }
 
   handleDrop = (files, rejectedFiles) => {
