@@ -8,13 +8,12 @@ export default class DropzoneS3Uploader extends React.Component {
     host: PropTypes.string,
     server: PropTypes.string,
     s3Url: PropTypes.string,
-    s3_url: PropTypes.string,
-    signing_url: PropTypes.string,
+
+    contentDisposition: PropTypes.string,
     signingUrl: PropTypes.string,
-    signing_url_query_params: PropTypes.object,
     signingUrlQueryParams: PropTypes.object,
-    signing_url_headers: PropTypes.object,
     signingUrlHeaders: PropTypes.object,
+    uploaderOptions: PropTypes.object,
     className: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.array,
@@ -35,19 +34,13 @@ export default class DropzoneS3Uploader extends React.Component {
     multiple: PropTypes.bool,
     accept: PropTypes.string,
     filename: PropTypes.string,
-    max_file_size: PropTypes.number,
     maxFileSize: PropTypes.number,
-    min_file_size: PropTypes.number,
     minFileSize: PropTypes.number,
 
     style: PropTypes.object,
-    active_style: PropTypes.object,
     activeStyle: PropTypes.object,
-    reject_style: PropTypes.object,
     rejectStyle: PropTypes.object,
-    image_style: PropTypes.object,
     imageStyle: PropTypes.object,
-    disable_click: PropTypes.bool,
     disableClick: PropTypes.bool,
     hideErrorMessage: PropTypes.bool,
   }
@@ -103,10 +96,8 @@ export default class DropzoneS3Uploader extends React.Component {
     const filenames = this.state.filenames || []
     const filename = file.name
     filenames.push(filename)
-    this.setState(
-      {filename, filenames, error: null, progress: null},
-      () => this.props.onFinish && this.props.onFinish(info, file)
-    )
+    const newState = {filename, filenames, error: null, progress: null}
+    this.setState(newState, () => this.props.onFinish && this.props.onFinish(info, file))
   }
 
   handleDrop = (files, rejectedFiles) => {
@@ -114,9 +105,9 @@ export default class DropzoneS3Uploader extends React.Component {
 
     const options = Object.assign({
       files,
-      signingUrl: this.props.signing_url || this.props.signingUrl,
-      signingUrlQueryParams: this.props.signing_url_query_params || this.props.signingUrlQueryParams,
-      signingUrlHeaders: this.props.signing_url_headers || this.props.signingUrlHeaders,
+      signingUrl: this.props.signingUrl,
+      signingUrlQueryParams: this.props.signingUrlQueryParams,
+      signingUrlHeaders: this.props.signingUrlHeaders,
 
       uploadRequestHeaders: this.props.headers || this.props.uploadRequestHeaders,
       contentDisposition: this.props.contentDisposition,
@@ -141,7 +132,7 @@ export default class DropzoneS3Uploader extends React.Component {
     const state = this.state || {filename: this.props.filename}
     const {className, style, multiple, accept} = this.props
     const {filename, filenames, progress, error} = state
-    const s3Url = this.props.s3Url || this.props.s3_url
+    const s3Url = this.props.s3Url
     const fileUrl = filename ? `${s3Url}/${filename}` : null
     const fileUrls = filenames ? filenames.map(filename => `${s3Url}/${filename}`) : null
     const ProgressComponent = this.props.progressComponent
@@ -153,14 +144,14 @@ export default class DropzoneS3Uploader extends React.Component {
       style,
       multiple,
       accept,
-      disableClick: this.props.disable_click || this.props.disableClick,
-      activeStyle: this.props.active_style || this.props.activeStyle,
-      rejectStyle: this.props.reject_style || this.props.rejectStyle,
-      minSize: this.props.min_file_size || this.props.minFileSize,
-      maxSize: this.props.max_file_size || this.props.maxFileSize,
+      disableClick: this.props.disableClick,
+      activeStyle: this.props.activeStyle,
+      rejectStyle: this.props.rejectStyle,
+      minSize: this.props.minFileSize,
+      maxSize: this.props.maxFileSize,
     }
 
-    const imageStyle = this.props.image_style || this.props.imageStyle
+    const imageStyle = this.props.imageStyle
     const childProps = {fileUrl, fileUrls, s3Url, filename, filenames, progress, error, imageStyle}
 
     let contents = null
