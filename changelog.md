@@ -1,6 +1,9 @@
 
 ## [Unreleased]
   
+## [0.10.0]
+  - Removed underscored props in favour of camelCase only.
+
 ## [0.9.0]
   - Upgraded `react-s3-uploader` to v3.3.0
   - Added some props: `uploaderOptions` and `preprocess`
