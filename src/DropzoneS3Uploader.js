@@ -31,6 +31,7 @@ export default class DropzoneS3Uploader extends React.Component {
 
     children: PropTypes.element,
     headers: PropTypes.object,
+    uploadRequestHeaders: PropTypes.object,
     multiple: PropTypes.bool,
     accept: PropTypes.string,
     filename: PropTypes.string,
@@ -54,7 +55,7 @@ export default class DropzoneS3Uploader extends React.Component {
   static defaultProps = {
     uploaderOptions: {},
     signingUrl: '/s3/sign',
-    headers: {'x-amz-acl': 'public-read'},
+    uploadRequestHeaders: {'x-amz-acl': 'public-read'},
     contentDisposition: 'auto',
     signingUrlQueryParams: {},
     signingUrlHeaders: {},
@@ -114,7 +115,7 @@ export default class DropzoneS3Uploader extends React.Component {
       signingUrlQueryParams: this.props.signing_url_query_params || this.props.signingUrlQueryParams,
       signingUrlHeaders: this.props.signing_url_headers || this.props.signingUrlHeaders,
 
-      uploadRequestHeaders: this.props.headers,
+      uploadRequestHeaders: this.props.headers || this.props.uploadRequestHeaders,
       contentDisposition: this.props.contentDisposition,
 
       onProgress: this.onProgress,
