@@ -91,8 +91,7 @@ Available options:
 
 Custom display component:
 -------------------------
-Specify your own display for an uploaded file. Will receive these props:
-```{fileUrl, s3Url, filename, progress, error, imageStyle}```
+Specify your own display for an uploaded file.
 ```javascript
 <DropzoneS3Uploader onFinish={this.handleFinishedUpload} {...uploaderProps}>
   <CustomElement />
