@@ -27,6 +27,7 @@ export default class DropzoneS3Uploader extends React.Component {
     onFinish: PropTypes.func,
     preprocess: PropTypes.func,
     isImage: PropTypes.func,
+    dropzoneProps: PropTypes.object,
 
     children: PropTypes.element,
     headers: PropTypes.object,
@@ -149,6 +150,7 @@ export default class DropzoneS3Uploader extends React.Component {
       rejectStyle: this.props.rejectStyle,
       minSize: this.props.minFileSize,
       maxSize: this.props.maxFileSize,
+      ...this.props.dropzoneProps,
     }
 
     const imageStyle = this.props.imageStyle
