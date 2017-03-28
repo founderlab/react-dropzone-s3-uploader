@@ -1,42 +1,68 @@
-# Drag and drop s3 file uploader via react-dropzone + react-s3-uploader
+# Drag and drop s3 file uploader via [react-dropzone](https://github.com/okonet/react-dropzone) and [react-s3-uploader](https://github.com/odysseyscience/react-s3-uploader)
 
+This component uploads files dropped into `react-dropzone` to s3 with `react-s3-uploader`.
 
-For more detailed docs see these:
----------------------------------
-
-- https://github.com/paramaggarwal/react-dropzone
-- https://github.com/odysseyscience/react-s3-uploader
+####For more detailed docs see the source packages
+- [react-dropzone](https://github.com/okonet/react-dropzone)
+- [react-s3-uploader](https://github.com/odysseyscience/react-s3-uploader)
 
 
 
 Usage (client):
 ---------------
 
+Props are passed through to `react-dropzone` (other than ones used locally).
+Locally used props: 
+| Prop | Type | Description |
+| --- | --- | --- |
+| s3Url | PropTypes.string |  | 
+| filename | PropTypes.string |  | 
+| notDropzoneProps | PropTypes.array.isRequired |  | 
+| isImage | PropTypes.func.isRequired |  | 
+| passChildrenProps | PropTypes.func.isRequired |  | 
+
+| imageComponent | PropTypes.func |  | 
+| fileComponent | PropTypes.func |  | 
+| progressComponent | PropTypes.func |  | 
+| errorComponent | PropTypes.func |  | 
+
+| children | PropTypes.node \|\| PropTypes.func |  | 
+
+| onDrop | PropTypes.func |  | 
+| onError | PropTypes.func |  | 
+| onProgress | PropTypes.func |  | 
+| onFinish | PropTypes.func |  | 
+
+| upload | PropTypes.object.isRequired | Upload options passed to react-s3-uploader | 
+
+
+
 ```javascript
 import DropzoneS3Uploader from 'react-dropzone-s3-uploader'
 
-function MyComponent() {
-  const style = {
-    height: 200,
-    border: 'dashed 2px #999',
-    borderRadius: 5,
-    position: 'relative',
-    cursor: 'pointer',
+export default class S3Uploader extends React.Component {
+
+  handleFinishedUpload = info => {
+    console.log('File uploaded with filename', info.filename)
+    console.log('Access it on s3 at', info.fileUrl)
   }
 
-  const uploaderProps = {
-    style,
-    maxFileSize: 1024 * 1024 * 50,
-    server: 'https://example/com',
-    s3Url: 'https://my-bucket.s3.amazonaws.com/',
-    signingUrlQueryParams: {uploadType: 'avatar'},
-  }
+  render() {
+    const uploadOptions = {
+      server: 'http://localhost:4000',
+      s3Url: 'https://my-bucket.s3.amazonaws.com/',
+      signingUrlQueryParams: {uploadType: 'avatar'},
+    }
 
-  return (
-    <DropzoneS3Uploader onFinish={this.handleFinishedUpload} {...uploaderProps} />
-  )
+    return (
+      <DropzoneS3Uploader 
+        onFinish={this.handleFinishedUpload} 
+        maxSize={1024 * 1024 * 5},
+        upload={uploadOptions}
+      />
+    )
+  }
 }
-
 ```
 
 
