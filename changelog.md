@@ -1,6 +1,10 @@
 
 ## [Unreleased]
-  
+  - Refactoring to clean up this abomination
+
+## [0.11.0]
+  - Upgraded react-s3-uploader to ^4.0.0
+
 ## [0.10.0]
   - Removed underscored props in favour of camelCase only.
 
