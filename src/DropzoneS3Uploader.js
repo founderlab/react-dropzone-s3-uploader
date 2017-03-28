@@ -42,7 +42,7 @@ export default class DropzoneS3Uploader extends React.Component {
   static defaultProps = {
     upload: {},
     className: 'react-dropzone-s3-uploader',
-    passChildrenProps: props => !props.children,
+    passChildrenProps: props => true,
     isImage: filename => filename && filename.match(/\.(jpeg|jpg|gif|png|svg)/i),
     notDropzoneProps: ['onFinish', 's3Url', 'filename', 'host', 'uploaderOptions', 'isImage', 'notDropzoneProps'],
 
@@ -67,10 +67,12 @@ export default class DropzoneS3Uploader extends React.Component {
 
   constructor(props) {
     super()
-    this.state = {
-      filename: props.filename,
-      uploadedFiles: [],
+    const uploadedFiles = []
+    const {filename} = props
+    if (filename) {
+      uploadedFiles.push({filename, fileUrl: this.fileUrl(props.s3Url, filename), default: true, {file: {}}})
     }
+    this.state = {uploadedFiles}
   }
 
   componentWillMount = () => this.setUploaderOptions(this.props)
@@ -102,7 +104,7 @@ export default class DropzoneS3Uploader extends React.Component {
   handleFinish = (info, file) => {
     const uploadedFile = Object.assign({
       file,
-      fileUrl: `${this.props.s3Url}/${info.filename}`,
+      fileUrl: this.fileUrl(info.filename),
     }, info)
 
     const uploadedFiles = this.state.uploadedFiles
@@ -122,6 +124,8 @@ export default class DropzoneS3Uploader extends React.Component {
     new S3Upload(options) // eslint-disable-line
     this.props.onDrop && this.props.onDrop(files, rejectedFiles)
   }
+
+  fileUrl = (s3Url, filename) => `${s3Url.endsWith('/') ? s3Url.slice(0, -1) : s3Url}/${filename}`
 
   renderImage = ({uploadedFile}) => (<div className="rdsu-image"><img src={uploadedFile.fileUrl} /></div>)
 
@@ -154,7 +158,7 @@ export default class DropzoneS3Uploader extends React.Component {
     const ErrorComponent = errorComponent || this.renderError
 
     const {uploadedFiles} = this.state
-    const childProps = passChildrenProps(this.props) ? {uploadedFiles, s3Url, ...this.state} : {}
+    const childProps = {s3Url, ...this.state}
     this.props.notDropzoneProps.forEach(prop => delete dropzoneProps[prop])
 
     let content = null

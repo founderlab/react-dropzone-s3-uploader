@@ -8,8 +8,8 @@ For more detailed docs see the source packages
 
 
 
-Usage (client):
----------------
+## Usage (client)
+
 
 #### Available props
 
@@ -18,17 +18,17 @@ Usage (client):
 
 Prop              | Type              | Description                                 
 ----------------- | ----------------- | ------------------------------------------- 
-s3Url             | string.isRequired | The url of your s3 bucket (`https://my-bucket.s3.amazonaws.com/`)
+s3Url             | string.isRequired | The url of your s3 bucket (`https://my-bucket.s3.amazonaws.com`)
 upload            | object.isRequired | Upload options passed to react-s3-uploader
 filename          | string            | Initial filename (existing data if used as part of a form)
 notDropzoneProps  | array             | A list of props to *not* pass to `react-dropzone`
 isImage           | func              | A function that takes a filename and returns true if it's an image
-passChildrenProps | func              | Set to true to pass the current state to children of this component. Defaults to false if children are provided
 imageComponent    | func              | Component used to render an uploaded image
 fileComponent     | func              | Component used to render an uploaded file
 progressComponent | func              | Component used to render upload progress
 errorComponent    | func              | Component used to render an error
 children          | node \|\| func    | If present the above components will be ignored in favour of the children
+passChildrenProps | func              | If true we pass the current state to children of this component. Defaults to true
 onDrop            | func              | Called when a file is dropped onto the uploader
 onError           | func              | Called when an upload error occurs
 onProgress        | func              | Called when a chunk has been uploaded
@@ -36,6 +36,9 @@ onFinish          | func              | Called when a file has completed uploadi
 ...rest           |                   | All other props are passed on to the `react-dropzone` component
 
 
+#### Examples
+
+##### Simple
 ```javascript
 import DropzoneS3Uploader from 'react-dropzone-s3-uploader'
 
@@ -49,7 +52,7 @@ export default class S3Uploader extends React.Component {
   render() {
     const uploadOptions = {
       server: 'http://localhost:4000',
-      s3Url: 'https://my-bucket.s3.amazonaws.com/',
+      s3Url: 'https://my-bucket.s3.amazonaws.com',
       signingUrlQueryParams: {uploadType: 'avatar'},
     }
 
@@ -64,20 +67,64 @@ export default class S3Uploader extends React.Component {
 }
 ```
 
+##### Custom display component
+Specify your own component to display uploaded files. Passed a list of `uploadedFile` objects.
 
-Usage (server):
----------------
+```javascript
 
-Use s3Router from react-s3-uploader to get signed urls for uploads.
-See https://github.com/odysseyscience/react-s3-uploader for more details.
-`react-dropzone-s3-uploader/s3router` can be used as an alias for `react-s3-uploader/s3router`.
+// elsewhere
+class UploadDisplay extends React.Component {
+  render() {
+    const {uploadedFiles, s3Url} = this.props
+    return (
+      <div> 
+        {uploadedFiles.map(uploadedFile => {
+          const {
+            filename,   // s3 filename
+            fileUrl,    // full s3 url of the file
+            file,       // file descriptor from the upload
+          } = uploadedFile
+          return (
+            <div>
+              <img src={fileUrl} />
+              <p>{file.name}</p>
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
+}
+
+// ...
+// back in your uploader 
+// ...
+
+    return (
+      <DropzoneS3Uploader 
+        onFinish={this.handleFinishedUpload} 
+        upload={uploadOptions}
+      >
+        <UploadDisplay />
+      </DropzoneS3Uploader>
+    )
+  }
+}
+```
+
+
+## Usage (server)
+
+- Use s3Router from react-s3-uploader to get signed urls for uploads.
+- See https://github.com/odysseyscience/react-s3-uploader for more details.
+- `react-dropzone-s3-uploader/s3router` can be used as an alias for `react-s3-uploader/s3router`.
 
 ```javascript
 app.use('/s3', require('react-dropzone-s3-uploader/s3router')({
-    bucket: 'MyS3Bucket',
-    region: 'us-east-1', //optional
-    headers: {'Access-Control-Allow-Origin': '*'}, // optional
-    ACL: 'private' // this is default
+  bucket: 'MyS3Bucket',
+  region: 'us-east-1', //optional
+  headers: {'Access-Control-Allow-Origin': '*'}, // optional
+  ACL: 'private' // this is default
 }));
 ```
 
@@ -113,12 +160,3 @@ Available options:
 <ul>
   <li> hideErrorMessage: Do not show errors inside this component.
 </ul>
-
-Custom display component:
--------------------------
-Specify your own display for an uploaded file.
-```javascript
-<DropzoneS3Uploader onFinish={this.handleFinishedUpload} {...uploaderProps}>
-  <CustomElement />
-</DropzoneS3Uploader>
-```
