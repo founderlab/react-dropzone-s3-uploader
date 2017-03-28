@@ -1,8 +1,8 @@
-# Drag and drop s3 file uploader via [react-dropzone](https://github.com/okonet/react-dropzone) and [react-s3-uploader](https://github.com/odysseyscience/react-s3-uploader)
+# Drag and drop s3 file uploader for React
 
-This component uploads files dropped into `react-dropzone` to s3 with `react-s3-uploader`.
+This component uploads files dropped into [react-dropzone](https://github.com/okonet/react-dropzone) to s3 with [react-s3-uploader](https://github.com/odysseyscience/react-s3-uploader).
 
-####For more detailed docs see the source packages
+For more detailed docs see the source packages
 - [react-dropzone](https://github.com/okonet/react-dropzone)
 - [react-s3-uploader](https://github.com/odysseyscience/react-s3-uploader)
 
@@ -20,7 +20,6 @@ Prop              | Type              | Description
 ----------------- | ----------------- | ------------------------------------------- 
 s3Url             | string.isRequired | The url of your s3 bucket (`https://my-bucket.s3.amazonaws.com/`)
 upload            | object.isRequired | Upload options passed to react-s3-uploader
-                  |                   | 
 filename          | string            | Initial filename (existing data if used as part of a form)
 notDropzoneProps  | array             | A list of props to *not* pass to `react-dropzone`
 isImage           | func              | A function that takes a filename and returns true if it's an image
