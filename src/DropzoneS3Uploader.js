@@ -9,7 +9,7 @@ export default class DropzoneS3Uploader extends React.Component {
     s3Url: PropTypes.string.isRequired,
     notDropzoneProps: PropTypes.array.isRequired,
     isImage: PropTypes.func.isRequired,
-    passChildrenProps: PropTypes.func.isRequired,
+    passChildrenProps: PropTypes.bool,
 
     imageComponent: PropTypes.func,
     fileComponent: PropTypes.func,
@@ -42,7 +42,7 @@ export default class DropzoneS3Uploader extends React.Component {
   static defaultProps = {
     upload: {},
     className: 'react-dropzone-s3-uploader',
-    passChildrenProps: props => true,
+    passChildrenProps: true,
     isImage: filename => filename && filename.match(/\.(jpeg|jpg|gif|png|svg)/i),
     notDropzoneProps: ['onFinish', 's3Url', 'filename', 'host', 'uploaderOptions', 'isImage', 'notDropzoneProps'],
 
