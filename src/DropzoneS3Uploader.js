@@ -5,58 +5,43 @@ import Dropzone from 'react-dropzone'
 export default class DropzoneS3Uploader extends React.Component {
 
   static propTypes = {
-    host: PropTypes.string,
-    server: PropTypes.string,
     s3Url: PropTypes.string,
+    filename: PropTypes.string,
+    notDropzoneProps: PropTypes.array.isRequired,
+    isImage: PropTypes.func.isRequired,
+    passChildrenProps: PropTypes.func.isRequired,
 
-    contentDisposition: PropTypes.string,
-    signingUrl: PropTypes.string,
-    signingUrlQueryParams: PropTypes.object,
-    signingUrlHeaders: PropTypes.object,
-    uploaderOptions: PropTypes.object,
-    className: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.array,
-    ]),
-
+    imageComponent: PropTypes.func,
     fileComponent: PropTypes.func,
     progressComponent: PropTypes.func,
+    errorComponent: PropTypes.func,
+
+    children: PropTypes.oneOfType([
+      React.PropTypes.node,
+      React.PropTypes.func
+    ]),
+
     onDrop: PropTypes.func,
     onError: PropTypes.func,
     onProgress: PropTypes.func,
     onFinish: PropTypes.func,
-    preprocess: PropTypes.func,
-    isImage: PropTypes.func,
-    dropzoneProps: PropTypes.object,
 
-    children: PropTypes.element,
-    headers: PropTypes.object,
-    uploadRequestHeaders: PropTypes.object,
-    multiple: PropTypes.bool,
-    accept: PropTypes.string,
-    filename: PropTypes.string,
-    maxFileSize: PropTypes.number,
-    minFileSize: PropTypes.number,
+    // Passed to react-s3-uploader
+    uploaderOptions: PropTypes.object.isRequired,
 
+    // Default styles for react-dropzone
     style: PropTypes.object,
     activeStyle: PropTypes.object,
     rejectStyle: PropTypes.object,
-    imageStyle: PropTypes.object,
-    disableClick: PropTypes.bool,
-    hideErrorMessage: PropTypes.bool,
   }
 
   static defaultProps = {
     uploaderOptions: {},
-    signingUrl: '/s3/sign',
-    uploadRequestHeaders: {'x-amz-acl': 'public-read'},
-    contentDisposition: 'auto',
-    signingUrlQueryParams: {},
-    signingUrlHeaders: {},
-
     className: 'react-dropzone-s3-uploader',
-    multiple: false,
+    passChildrenProps: props => !props.children,
     isImage: filename => filename && filename.match(/\.(jpeg|jpg|gif|png|svg)/i),
+    notDropzoneProps: ['onFinish', 's3Url', 'filename', 'host', 'uploaderOptions', 'isImage', 'notDropzoneProps'],
+
     style: {
       width: 200,
       height: 200,
@@ -74,106 +59,128 @@ export default class DropzoneS3Uploader extends React.Component {
       borderStyle: 'solid',
       backgroundColor: '#ffdddd',
     },
-    imageStyle: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      maxWidth: '100%',
-      height: 'auto',
-    },
   }
 
-  onProgress = (progress, textState, file) => {
+  constructor(props) {
+    super()
+    this.state = {
+      filename: props.filename,
+      uploadedFiles: [],
+    }
+  }
+
+  componentWillMount = () => this.setUploaderOptions(this.props)
+  componentWillReceiveProps = props => this.setUploaderOptions(props)
+
+  setUploaderOptions = props => {
+    this.setState({
+      uploaderOptions: Object.assign({
+        signingUrl: '/s3/sign',
+        contentDisposition: 'auto',
+        uploadRequestHeaders: {'x-amz-acl': 'public-read'},
+        onFinishS3Put: this.handleFinish,
+        onProgress: this.handleProgress,
+        onError: this.handleError,
+      }, props.uploaderOptions),
+    })
+  }
+
+  handleProgress = (progress, textState, file) => {
     this.props.onProgress && this.props.onProgress(progress, textState, file)
     this.setState({progress})
   }
 
-  onError = err => {
+  handleError = err => {
     this.props.onError && this.props.onError(err)
     this.setState({error: err, progress: null})
   }
 
-  onFinish = (info, file) => {
-    const filenames = this.state.filenames || []
-    const filename = file.name
-    filenames.push(filename)
-    const newState = {filename, filenames, error: null, progress: null}
-    this.setState(newState, () => this.props.onFinish && this.props.onFinish(info, file))
+  handleFinish = (info, file) => {
+    const uploadedFile = Object.assign({
+      file,
+      fileUrl: `${this.props.s3Url}/${info.filename}`,
+    }, info)
+
+    const uploadedFiles = this.state.uploadedFiles
+    uploadedFiles.push(uploadedFile)
+
+    this.setState({uploadedFiles, error: null, progress: null}, () => {
+      this.props.onFinish && this.props.onFinish(uploadedFile)
+    })
   }
 
   handleDrop = (files, rejectedFiles) => {
-    this.setState({filenames: [], filename: null, error: null, progress: null})
-
-    const options = Object.assign({
+    this.setState({uploadedFiles: [], error: null, progress: null})
+    const options = {
       files,
-      signingUrl: this.props.signingUrl,
-      signingUrlQueryParams: this.props.signingUrlQueryParams,
-      signingUrlHeaders: this.props.signingUrlHeaders,
-
-      uploadRequestHeaders: this.props.headers || this.props.uploadRequestHeaders,
-      contentDisposition: this.props.contentDisposition,
-
-      onProgress: this.onProgress,
-      onFinishS3Put: this.onFinish,
-      onError: this.onError,
-
-      server: this.props.server || this.props.host || '',
-    }, this.props.uploaderOptions)
-
-    if (this.props.preprocess) options.preprocess = this.props.preprocess
-
+      ...this.state.uploaderOptions,
+    }
     new S3Upload(options) // eslint-disable-line
-
     this.props.onDrop && this.props.onDrop(files, rejectedFiles)
   }
 
-  renderFileComponent = ({filename}) => (<div><span className="glyphicon glyphicon-file" style={{fontSize: '50px'}} />{filename}</div>)
+  renderImage = ({uploadedFile}) => (<div className="rdsu-image"><img src={uploadedFile.fileUrl} /></div>)
+
+  renderFile = ({uploadedFile}) => (
+    <div className="rdsu-file">
+      <div className="rdsu-file-icon"><span className="fa fa-file-o" style={{fontSize: '50px'}} /></div>
+      <div className="rdsu-filename">{uploadedFile.file.name}</div>
+    </div>
+  )
+
+  renderProgress = ({progress}) => (progress ? (<div className="rdsu-progress">{progress}</div>) : null)
+
+  renderError = ({error}) => (error ? (<div className="rdsu-error small">{error}</div>) : null)
 
   render() {
-    const state = this.state || {filename: this.props.filename}
-    const {className, style, multiple, accept} = this.props
-    const {filename, filenames, progress, error} = state
-    const s3Url = this.props.s3Url
-    const fileUrl = filename ? `${s3Url}/${filename}` : null
-    const fileUrls = filenames ? filenames.map(filename => `${s3Url}/${filename}`) : null
-    const ProgressComponent = this.props.progressComponent
-    const FileComponent = this.props.fileComponent || this.renderFileComponent
-    const hideErrorMessage = this.props.hideErrorMessage || false
+    const {
+      s3Url,
+      passChildrenProps,
+      children,
+      imageComponent,
+      fileComponent,
+      progressComponent,
+      errorComponent,
+      ...dropzoneProps,
+    } = this.props
 
-    const dropzoneProps = {
-      className,
-      style,
-      multiple,
-      accept,
-      disableClick: this.props.disableClick,
-      activeStyle: this.props.activeStyle,
-      rejectStyle: this.props.rejectStyle,
-      minSize: this.props.minFileSize,
-      maxSize: this.props.maxFileSize,
-      ...this.props.dropzoneProps,
+    const ImageComponent = imageComponent || this.renderImage
+    const FileComponent = fileComponent || this.renderFile
+    const ProgressComponent = progressComponent || this.renderProgress
+    const ErrorComponent = errorComponent || this.renderError
+
+    const {uploadedFiles} = this.state
+    const childProps = passChildrenProps(this.props) ? {uploadedFiles, s3Url, ...this.state} : {}
+    this.props.notDropzoneProps.forEach(prop => delete dropzoneProps[prop])
+
+    let content = null
+    if (children) {
+      content = passChildrenProps ?
+        React.Children.map(children, child => React.cloneElement(child, childProps)) :
+        this.props.children
     }
-
-    const imageStyle = this.props.imageStyle
-    const childProps = {fileUrl, fileUrls, s3Url, filename, filenames, progress, error, imageStyle}
-
-    let contents = null
-    if (this.props.children) {
-      contents = this.props.children
-    }
-    else if (fileUrl) {
-      if (this.props.isImage(fileUrl)) {
-        contents = (<img src={fileUrl} style={imageStyle} />)
-      }
-      else {
-        contents = (<FileComponent {...childProps} />)
-      }
+    else {
+      content = (
+        <div>
+          {uploadedFiles.map(uploadedFile => {
+            const props = {
+              key: uploadedFile.filename,
+              uploadedFile: uploadedFile,
+              ...childProps
+            }
+            return this.props.isImage(uploadedFile.fileUrl) ?
+              (<ImageComponent  {...props} />) :
+              (<FileComponent {...props} />)
+          })}
+          <ProgressComponent {...childProps} />
+          <ErrorComponent {...childProps} />
+        </div>
+      )
     }
 
     return (
-      <Dropzone onDrop={this.handleDrop} {...dropzoneProps} >
-        {contents}
-        {progress && ProgressComponent ? (<ProgressComponent progress={progress} />) : null}
-        {error && !hideErrorMessage ? (<small>{error}</small>) : null}
+      <Dropzone onDrop={this.handleDrop} {...dropzoneProps}>
+        {content}
       </Dropzone>
     )
   }
