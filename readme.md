@@ -11,27 +11,30 @@ This component uploads files dropped into `react-dropzone` to s3 with `react-s3-
 Usage (client):
 ---------------
 
-Props are passed through to `react-dropzone` (other than ones used locally).
-Locally used props: 
+#### Available props
+
+`s3Url` and `upload` are the only props that require configuration. All others have sensible defaults that may be overridden.
 
 
-| Prop | Type | Description |
-| --- | --- | --- |
-| s3Url | PropTypes.string |  | 
-| filename | PropTypes.string |  | 
-| notDropzoneProps | PropTypes.array.isRequired |  | 
-| isImage | PropTypes.func.isRequired |  | 
-| passChildrenProps | PropTypes.func.isRequired |  | 
-| imageComponent | PropTypes.func |  | 
-| fileComponent | PropTypes.func |  | 
-| progressComponent | PropTypes.func |  | 
-| errorComponent | PropTypes.func |  | 
-| children | PropTypes.node \|\| PropTypes.func |  | 
-| onDrop | PropTypes.func |  | 
-| onError | PropTypes.func |  | 
-| onProgress | PropTypes.func |  | 
-| onFinish | PropTypes.func |  | 
-| upload | PropTypes.object.isRequired | Upload options passed to react-s3-uploader | 
+Prop              | Type              | Description                                 
+----------------- | ----------------- | ------------------------------------------- 
+s3Url             | string.isRequired | The url of your s3 bucket (`https://my-bucket.s3.amazonaws.com/`)
+upload            | object.isRequired | Upload options passed to react-s3-uploader
+                  |                   | 
+filename          | string            | Initial filename (existing data if used as part of a form)
+notDropzoneProps  | array             | A list of props to *not* pass to `react-dropzone`
+isImage           | func              | A function that takes a filename and returns true if it's an image
+passChildrenProps | func              | Set to true to pass the current state to children of this component. Defaults to false if children are provided
+imageComponent    | func              | Component used to render an uploaded image
+fileComponent     | func              | Component used to render an uploaded file
+progressComponent | func              | Component used to render upload progress
+errorComponent    | func              | Component used to render an error
+children          | node \|\| func    | If present the above components will be ignored in favour of the children
+onDrop            | func              | Called when a file is dropped onto the uploader
+onError           | func              | Called when an upload error occurs
+onProgress        | func              | Called when a chunk has been uploaded
+onFinish          | func              | Called when a file has completed uploading. Called once per file if multi=true
+...rest           |                   | All other props are passed on to the `react-dropzone` component
 
 
 ```javascript

@@ -5,8 +5,8 @@ import Dropzone from 'react-dropzone'
 export default class DropzoneS3Uploader extends React.Component {
 
   static propTypes = {
-    s3Url: PropTypes.string,
     filename: PropTypes.string,
+    s3Url: PropTypes.string.isRequired,
     notDropzoneProps: PropTypes.array.isRequired,
     isImage: PropTypes.func.isRequired,
     passChildrenProps: PropTypes.func.isRequired,
@@ -30,6 +30,10 @@ export default class DropzoneS3Uploader extends React.Component {
     upload: PropTypes.object.isRequired,
 
     // Default styles for react-dropzone
+    className: PropTypes..oneOfType([
+      PropTypes.string,
+      PropTypes.object,
+    ]),
     style: PropTypes.object,
     activeStyle: PropTypes.object,
     rejectStyle: PropTypes.object,
