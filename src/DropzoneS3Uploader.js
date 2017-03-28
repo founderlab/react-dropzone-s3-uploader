@@ -30,7 +30,7 @@ export default class DropzoneS3Uploader extends React.Component {
     upload: PropTypes.object.isRequired,
 
     // Default styles for react-dropzone
-    className: PropTypes..oneOfType([
+    className: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.object,
     ]),
