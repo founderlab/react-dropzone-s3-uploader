@@ -13,6 +13,8 @@ Usage (client):
 
 Props are passed through to `react-dropzone` (other than ones used locally).
 Locally used props: 
+
+
 | Prop | Type | Description |
 | --- | --- | --- |
 | s3Url | PropTypes.string |  | 
@@ -20,21 +22,16 @@ Locally used props:
 | notDropzoneProps | PropTypes.array.isRequired |  | 
 | isImage | PropTypes.func.isRequired |  | 
 | passChildrenProps | PropTypes.func.isRequired |  | 
-
 | imageComponent | PropTypes.func |  | 
 | fileComponent | PropTypes.func |  | 
 | progressComponent | PropTypes.func |  | 
 | errorComponent | PropTypes.func |  | 
-
 | children | PropTypes.node \|\| PropTypes.func |  | 
-
 | onDrop | PropTypes.func |  | 
 | onError | PropTypes.func |  | 
 | onProgress | PropTypes.func |  | 
 | onFinish | PropTypes.func |  | 
-
 | upload | PropTypes.object.isRequired | Upload options passed to react-s3-uploader | 
-
 
 
 ```javascript
