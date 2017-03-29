@@ -36,9 +36,7 @@ onFinish          | func              | Called when a file has completed uploadi
 ...rest           |                   | All other props are passed on to the `react-dropzone` component
 
 
-#### Examples
-
-##### Simple
+#### Example
 ```javascript
 import DropzoneS3Uploader from 'react-dropzone-s3-uploader'
 
@@ -67,39 +65,45 @@ export default class S3Uploader extends React.Component {
 }
 ```
 
-##### Custom display component
+#### Custom display component
 Specify your own component to display uploaded files. Passed a list of `uploadedFile` objects.
 
 ```javascript
 
 // elsewhere
 class UploadDisplay extends React.Component {
+  
+  renderFileUpload = (uploadedFile, i) => {
+    const {
+      filename,   // s3 filename
+      fileUrl,    // full s3 url of the file
+      file,       // file descriptor from the upload
+    } = uploadedFile
+
+    return (
+      <div key={i}>
+        <img src={fileUrl} />
+        <p>{file.name}</p>
+      </div>
+    )
+  }
+
   render() {
     const {uploadedFiles, s3Url} = this.props
     return (
       <div> 
-        {uploadedFiles.map(uploadedFile => {
-          const {
-            filename,   // s3 filename
-            fileUrl,    // full s3 url of the file
-            file,       // file descriptor from the upload
-          } = uploadedFile
-          return (
-            <div>
-              <img src={fileUrl} />
-              <p>{file.name}</p>
-            </div>
-          )
-        })}
+        {uploadedFiles.map(this.renderFileUpload)}
       </div>
     )
   }
 }
 
-// ...
-// back in your uploader 
-// ...
+// back in your uploader...
+class S3Uploader extends React.Component {
 
+  //...
+
+  render() {
     return (
       <DropzoneS3Uploader 
         onFinish={this.handleFinishedUpload} 
@@ -116,8 +120,8 @@ class UploadDisplay extends React.Component {
 ## Usage (server)
 
 - Use s3Router from react-s3-uploader to get signed urls for uploads.
-- See [react-s3-uploader](https://github.com/odysseyscience/react-s3-uploader) for more details.
 - `react-dropzone-s3-uploader/s3router` can be used as an alias for `react-s3-uploader/s3router`.
+- See [react-s3-uploader](https://github.com/odysseyscience/react-s3-uploader) for more details.
 
 ```javascript
 app.use('/s3', require('react-dropzone-s3-uploader/s3router')({
