@@ -1,10 +1,13 @@
 
 ## [Unreleased]
-  - Refactoring to clean up this abomination
+  
+## [1.0.0-rc.2]
+  - The prop `upload` is used to specify options for `react-s3-uploader` (replaces `uploaderOptions`). 
+  - Readme is better.
 
 ## [1.0.0-rc.1]
+  - Refactoring to clean up this abomination.
   - Props have been cleaned up. 
-  - The prop `upload` is used to specify options for `react-s3-uploader` (replaces `uploaderOptions`). 
   - Other props are pased to `react-dropzone`.
   - The `fileUrls` and `filenames` props have been replaced by `uploadedFile` objects. Each `uploadedFile` object has the filename, full s3 url (as `fileUrl`) and a reference to the original file descriptor from the upload.
   - Children have state information passed again via the `uploadedFiles` prop. 
