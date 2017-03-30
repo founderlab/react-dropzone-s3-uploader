@@ -18,7 +18,7 @@ export default class DropzoneS3Uploader extends React.Component {
 
     children: PropTypes.oneOfType([
       PropTypes.node,
-      PropTypes.func
+      PropTypes.func,
     ]),
 
     onDrop: PropTypes.func,
