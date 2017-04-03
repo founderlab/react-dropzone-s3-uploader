@@ -1,6 +1,10 @@
 
 ## [Unreleased]
   
+## [1.0.0-rc.3]
+  - Fixed a bug with file url creation (thanks @davidascher).
+  - Fixed a build error caused by babel picking up the wrong config.
+
 ## [1.0.0-rc.2]
   - The prop `upload` is used to specify options for `react-s3-uploader` (replaces `uploaderOptions`). 
   - Readme is better.
