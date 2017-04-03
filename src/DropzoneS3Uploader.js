@@ -179,7 +179,7 @@ export default class DropzoneS3Uploader extends React.Component {
             const props = {
               key: uploadedFile.filename,
               uploadedFile: uploadedFile,
-              ...childProps
+              ...childProps,
             }
             return this.props.isImage(uploadedFile.fileUrl) ?
               (<ImageComponent  {...props} />) :
@@ -192,7 +192,7 @@ export default class DropzoneS3Uploader extends React.Component {
     }
 
     return (
-      <Dropzone onDrop={this.handleDrop} {...dropzoneProps}>
+      <Dropzone ref={c => this._dropzone = c} onDrop={this.handleDrop} {...dropzoneProps}>
         {content}
       </Dropzone>
     )
