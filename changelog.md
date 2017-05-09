@@ -1,6 +1,9 @@
 
 ## [Unreleased]
   
+## [1.0.0]
+  - PropTypes via the prop-types package (thanks @13colours).
+
 ## [1.0.0-rc.3]
   - Fixed a bug with file url creation (thanks @davidascher).
   - Fixed a build error caused by babel picking up the wrong config.
