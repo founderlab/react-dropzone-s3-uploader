@@ -84,6 +84,12 @@ export default class DropzoneS3Uploader extends React.Component {
   componentWillMount = () => this.setUploaderOptions(this.props)
   componentWillReceiveProps = props => this.setUploaderOptions(props)
 
+  abortUpload = () => {
+    if (this.uploader) {
+      this.uploader.abortUpload()
+    }
+  }
+
   setUploaderOptions = props => {
     this.setState({
       uploaderOptions: Object.assign({
@@ -127,7 +133,7 @@ export default class DropzoneS3Uploader extends React.Component {
       files,
       ...this.state.uploaderOptions,
     }
-    new S3Upload(options) // eslint-disable-line
+    this.uploader = new S3Upload(options)
     this.props.onDrop && this.props.onDrop(files, rejectedFiles)
   }
 
