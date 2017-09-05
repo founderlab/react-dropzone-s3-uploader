@@ -58,7 +58,7 @@ export default class S3Uploader extends React.Component {
       <DropzoneS3Uploader
         onFinish={this.handleFinishedUpload}
         s3Url={s3Url}
-        maxSize={1024 * 1024 * 5},
+        maxSize={1024 * 1024 * 5}
         upload={uploadOptions}
       />
     )
