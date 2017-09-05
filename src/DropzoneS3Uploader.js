@@ -102,8 +102,8 @@ export default class DropzoneS3Uploader extends React.Component {
     this.setState({progress})
   }
 
-  handleError = err => {
-    this.props.onError && this.props.onError(err)
+  handleError = (err, file) => {
+    this.props.onError && this.props.onError(err, file)
     this.setState({error: err, progress: null})
   }
 
