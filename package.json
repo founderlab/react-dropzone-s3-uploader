@@ -1,6 +1,6 @@
 {
   "name": "react-dropzone-s3-uploader",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Drag and drop s3 file uploader via react-dropzone + react-s3-uploader",
   "main": "lib/index.js",
   "author": {
@@ -20,16 +20,25 @@
   },
   "dependencies": {
     "prop-types": "^15.5.8",
+    "react": "^16.0.0",
     "react-dropzone": "^4.0.0",
     "react-s3-uploader": "4.5.0"
   },
   "devDependencies": {
-    "babel": "^5.6.14",
-    "babel-core": "^5.6.15",
-    "babel-eslint": "^4.1.3",
+    "babel-cli": "6.18.0",
+    "babel-core": "6.21.0",
+    "babel-eslint": "7.1.1",
+    "babel-loader": "6.2.10",
+    "babel-plugin-react-transform": "2.0.2",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-es2015-modules-commonjs": "6.18.0",
+    "babel-preset-latest": "6.16.0",
+    "babel-preset-react": "6.16.0",
+    "babel-preset-stage-0": "6.16.0",
     "eslint": "^1.5.1",
     "eslint-config-founderlab": "^0.1.0",
     "eslint-plugin-react": "^3.4.2",
-    "expect": "^1.12.2"
+    "expect": "^1.12.2",
+    "webpack": "^3.8.1"
   }
 }

@@ -1,4 +1,14 @@
 {
-  "stage": 0,
-  "loose": "all",
+    "presets": [
+      [
+        "latest",
+        {
+          "es2015": {
+            "modules": false
+          }
+        }
+      ],
+      "react",
+      "stage-0"
+    ]
 }
