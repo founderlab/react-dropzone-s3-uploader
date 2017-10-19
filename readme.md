@@ -20,7 +20,7 @@ Prop              | Type              | Description
 ----------------- | ----------------- | ------------------------------------------- 
 s3Url             | string.isRequired | The url of your s3 bucket (`https://my-bucket.s3.amazonaws.com`)
 upload            | object.isRequired | Upload options passed to react-s3-uploader. See [react-s3-uploader](https://github.com/odysseyscience/react-s3-uploader) for available options. Don't set `onProgress`, `onError` or `onFinish` here - use the ones below
-filename          | string            | Used as the default value if present. Filename of an image already hosted on s3 (i.e. one that was uploaded previously)
+fileName          | string            | Used as the default value if present. Filename of an image already hosted on s3 (i.e. one that was uploaded previously)
 notDropzoneProps  | array             | A list of props to *not* pass to `react-dropzone`
 isImage           | func              | A function that takes a filename and returns true if it's an image
 imageComponent    | func              | Component used to render an uploaded image
@@ -28,6 +28,10 @@ fileComponent     | func              | Component used to render an uploaded fil
 progressComponent | func              | Component used to render upload progress
 errorComponent    | func              | Component used to render an error
 children          | node \|\| func    | If present the above components will be ignored in favour of the children
+signingUrl        | string            | API S3 Signing api endpoint - usually /s3/sign
+containerStyle    | object            | Parent container style
+placeChildrenOutsideDropArea | node   | Place react children outside the DropArea
+childrenDropzone  | node              | Component used inside the DropArea when placeChildrenOutsideDropArea is true
 passChildrenProps | bool              | If true we pass the current state to children of this component. Default is true. Set to false to avoid React warnings about unused props.
 onDrop            | func              | Called when a file is dropped onto the uploader
 onError           | func              | Called when an upload error occurs
@@ -43,7 +47,7 @@ import DropzoneS3Uploader from 'react-dropzone-s3-uploader'
 export default class S3Uploader extends React.Component {
 
   handleFinishedUpload = info => {
-    console.log('File uploaded with filename', info.filename)
+    console.log('File uploaded with filename', info.fileName)
     console.log('Access it on s3 at', info.fileUrl)
   }
 
@@ -76,7 +80,7 @@ class UploadDisplay extends React.Component {
   
   renderFileUpload = (uploadedFile, i) => {
     const {
-      filename,   // s3 filename
+      fileName,   // s3 filename
       fileUrl,    // full s3 url of the file
       file,       // file descriptor from the upload
     } = uploadedFile

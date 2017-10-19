@@ -6,7 +6,7 @@ import Dropzone from 'react-dropzone'
 export default class DropzoneS3Uploader extends React.Component {
 
   static propTypes = {
-    filename: PropTypes.string,
+    fileName: PropTypes.string,
     signingUrl: PropTypes.string.isRequired,
     s3Url: PropTypes.string,
     notDropzoneProps: PropTypes.array.isRequired,
@@ -51,8 +51,8 @@ export default class DropzoneS3Uploader extends React.Component {
     className: 'react-dropzone-s3-uploader',
     passChildrenProps: true,
     s3Url: '',
-    isImage: filename => filename && filename.match(/\.(jpeg|jpg|gif|png|svg)/i),
-    notDropzoneProps: ['onFinish', 'childrenDropzone', 'containerStyle', 'placeChildrenOutsideDropArea', 'signingUrl', 'signingUrlQueryParams', 's3Url', 'filename', 'host', 'upload', 'isImage', 'notDropzoneProps'],
+    isImage: fileName => fileName && fileName.match(/\.(jpeg|jpg|gif|png|svg)/i),
+    notDropzoneProps: ['onFinish', 'childrenDropzone', 'containerStyle', 'placeChildrenOutsideDropArea', 'signingUrl', 'signingUrlQueryParams', 's3Url', 'fileName', 'host', 'upload', 'isImage', 'notDropzoneProps'],
     style: {
       width: 200,
       height: 200,
@@ -75,11 +75,11 @@ export default class DropzoneS3Uploader extends React.Component {
   constructor(props) {
     super()
     const uploadedFiles = []
-    const {filename} = props
-    if (filename) {
+    const {fileName} = props
+    if (fileName) {
       uploadedFiles.push({
-        filename,
-        fileUrl: this.fileUrl(props.s3Url, filename),
+        fileName,
+        fileUrl: this.fileUrl(props.s3Url, fileName),
         default: true,
         file: {},
       })
@@ -114,11 +114,9 @@ export default class DropzoneS3Uploader extends React.Component {
   }
 
   handleFinish = (info, file) => {
-    console.log(info, file);
-
     const uploadedFile = Object.assign({
       file,
-      fileUrl: this.fileUrl(this.props.s3Url, info.filename),
+      fileUrl: this.fileUrl(this.props.s3Url, info.fileName),
     }, info)
 
     const uploadedFiles = this.state.uploadedFiles
@@ -139,7 +137,7 @@ export default class DropzoneS3Uploader extends React.Component {
     this.props.onDrop && this.props.onDrop(files, rejectedFiles)
   }
 
-  fileUrl = (s3Url, filename) => `${s3Url.endsWith('/') ? s3Url.slice(0, -1) : s3Url}/${filename}`
+  fileUrl = (s3Url, fileName) => `${s3Url.endsWith('/') ? s3Url.slice(0, -1) : s3Url}/${fileName}`
 
   renderImage = ({uploadedFile}) => (<div className="rdsu-image"><img src={uploadedFile.fileUrl} /></div>)
 
@@ -195,7 +193,7 @@ export default class DropzoneS3Uploader extends React.Component {
         <div>
           {uploadedFiles.map(uploadedFile => {
             const props = {
-              key: uploadedFile.filename,
+              key: uploadedFile.fileName,
               uploadedFile: uploadedFile,
               ...childProps,
             }
