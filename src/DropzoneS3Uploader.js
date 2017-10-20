@@ -183,7 +183,10 @@ export default class DropzoneS3Uploader extends React.Component {
 
       if (this.props.placeChildrenOutsideDropArea) {
         outsideContent = childrenContent
-        content = this.props.childrenDropzone
+
+        if (this.props.childrenDropzone) {
+          content = React.Children.map(this.props.childrenDropzone, child => React.cloneElement(child, childProps))
+        }
       } else {
         content = childrenContent
       }
