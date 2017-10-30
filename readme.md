@@ -15,9 +15,9 @@ For more detailed docs see the source packages
 
 `s3Url` and `upload` are the only props that require configuration. All others have sensible defaults that may be overridden.
 
-    
-Prop              | Type              | Description                                 
------------------ | ----------------- | ------------------------------------------- 
+
+Prop              | Type              | Description
+----------------- | ----------------- | -------------------------------------------
 s3Url             | string.isRequired | The url of your s3 bucket (`https://my-bucket.s3.amazonaws.com`)
 upload            | object.isRequired | Upload options passed to react-s3-uploader. See [react-s3-uploader](https://github.com/odysseyscience/react-s3-uploader) for available options. Don't set `onProgress`, `onError` or `onFinish` here - use the ones below
 fileName          | string            | Used as the default value if present. Filename of an image already hosted on s3 (i.e. one that was uploaded previously)
@@ -28,7 +28,6 @@ fileComponent     | func              | Component used to render an uploaded fil
 progressComponent | func              | Component used to render upload progress
 errorComponent    | func              | Component used to render an error
 children          | node \|\| func    | If present the above components will be ignored in favour of the children
-signingUrl        | string            | API S3 Signing api endpoint - usually /s3/sign
 containerStyle    | object            | Parent container style
 placeChildrenOutsideDropArea | node   | Place react children outside the DropArea
 childrenDropzone  | node              | Component used inside the DropArea when placeChildrenOutsideDropArea is true
@@ -54,6 +53,7 @@ export default class S3Uploader extends React.Component {
   render() {
     const uploadOptions = {
       server: 'http://localhost:4000',
+      signUrl: '/s3/sign',
       signingUrlQueryParams: {uploadType: 'avatar'},
     }
     const s3Url = 'https://my-bucket.s3.amazonaws.com'
@@ -77,7 +77,7 @@ Specify your own component to display uploaded files. Passed a list of `uploaded
 
 // elsewhere
 class UploadDisplay extends React.Component {
-  
+
   renderFileUpload = (uploadedFile, i) => {
     const {
       fileName,   // s3 filename
@@ -96,7 +96,7 @@ class UploadDisplay extends React.Component {
   render() {
     const {uploadedFiles, s3Url} = this.props
     return (
-      <div> 
+      <div>
         {uploadedFiles.map(this.renderFileUpload)}
       </div>
     )
@@ -110,8 +110,8 @@ class S3Uploader extends React.Component {
 
   render() {
     return (
-      <DropzoneS3Uploader 
-        onFinish={this.handleFinishedUpload} 
+      <DropzoneS3Uploader
+        onFinish={this.handleFinishedUpload}
         upload={uploadOptions}
       >
         <UploadDisplay />

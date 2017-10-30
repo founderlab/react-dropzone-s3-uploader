@@ -7,7 +7,6 @@ export default class DropzoneS3Uploader extends React.Component {
 
   static propTypes = {
     fileName: PropTypes.string,
-    signingUrl: PropTypes.string.isRequired,
     s3Url: PropTypes.string,
     notDropzoneProps: PropTypes.array.isRequired,
     isImage: PropTypes.func,
@@ -52,7 +51,7 @@ export default class DropzoneS3Uploader extends React.Component {
     passChildrenProps: true,
     s3Url: '',
     isImage: fileName => fileName && fileName.match(/\.(jpeg|jpg|gif|png|svg)/i),
-    notDropzoneProps: ['onFinish', 'childrenDropzone', 'containerStyle', 'placeChildrenOutsideDropArea', 'signingUrl', 'signingUrlQueryParams', 's3Url', 'fileName', 'host', 'upload', 'isImage', 'notDropzoneProps'],
+    notDropzoneProps: ['onFinish', 'childrenDropzone', 'containerStyle', 'placeChildrenOutsideDropArea', 's3Url', 'fileName', 'host', 'upload', 'isImage', 'notDropzoneProps'],
     style: {
       width: 200,
       height: 200,
@@ -93,7 +92,6 @@ export default class DropzoneS3Uploader extends React.Component {
   setUploaderOptions = props => {
     this.setState({
       uploaderOptions: Object.assign({
-        signingUrl: props.signingUrl,
         s3path: '',
         contentDisposition: 'auto',
         onFinishS3Put: this.handleFinish,
