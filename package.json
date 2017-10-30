@@ -1,6 +1,6 @@
 {
   "name": "react-dropzone-s3-uploader",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Drag and drop s3 file uploader via react-dropzone + react-s3-uploader",
   "main": "lib/index.js",
   "author": {

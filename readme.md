@@ -18,7 +18,7 @@ For more detailed docs see the source packages
 
 Prop              | Type              | Description
 ----------------- | ----------------- | -------------------------------------------
-s3Url             | string.isRequired | The url of your s3 bucket (`https://my-bucket.s3.amazonaws.com`)
+s3Url             | string            | The url of your s3 bucket (`https://my-bucket.s3.amazonaws.com`)
 upload            | object.isRequired | Upload options passed to react-s3-uploader. See [react-s3-uploader](https://github.com/odysseyscience/react-s3-uploader) for available options. Don't set `onProgress`, `onError` or `onFinish` here - use the ones below
 fileName          | string            | Used as the default value if present. Filename of an image already hosted on s3 (i.e. one that was uploaded previously)
 notDropzoneProps  | array             | A list of props to *not* pass to `react-dropzone`
