@@ -6,11 +6,14 @@ import Dropzone from 'react-dropzone'
 export default class DropzoneS3Uploader extends React.Component {
 
   static propTypes = {
-    filename: PropTypes.string,
-    s3Url: PropTypes.string.isRequired,
+    fileName: PropTypes.string,
+    s3Url: PropTypes.string,
     notDropzoneProps: PropTypes.array.isRequired,
-    isImage: PropTypes.func.isRequired,
+    isImage: PropTypes.func,
     passChildrenProps: PropTypes.bool,
+
+    // if true, all the child nodes will be placed outside the dropArea
+    placeChildrenOutsideDropArea: PropTypes.bool,
 
     imageComponent: PropTypes.func,
     fileComponent: PropTypes.func,
@@ -21,6 +24,8 @@ export default class DropzoneS3Uploader extends React.Component {
       PropTypes.node,
       PropTypes.func,
     ]),
+
+    childrenDropzone: PropTypes.node,
 
     onDrop: PropTypes.func,
     onError: PropTypes.func,
@@ -44,8 +49,9 @@ export default class DropzoneS3Uploader extends React.Component {
     upload: {},
     className: 'react-dropzone-s3-uploader',
     passChildrenProps: true,
-    isImage: filename => filename && filename.match(/\.(jpeg|jpg|gif|png|svg)/i),
-    notDropzoneProps: ['onFinish', 's3Url', 'filename', 'host', 'upload', 'isImage', 'notDropzoneProps'],
+    s3Url: '',
+    isImage: fileName => fileName && fileName.match(/\.(jpeg|jpg|gif|png|svg)/i),
+    notDropzoneProps: ['onFinish', 'childrenDropzone', 'containerStyle', 'placeChildrenOutsideDropArea', 's3Url', 'fileName', 'host', 'upload', 'isImage', 'notDropzoneProps'],
     style: {
       width: 200,
       height: 200,
@@ -68,11 +74,11 @@ export default class DropzoneS3Uploader extends React.Component {
   constructor(props) {
     super()
     const uploadedFiles = []
-    const {filename} = props
-    if (filename) {
+    const {fileName} = props
+    if (fileName) {
       uploadedFiles.push({
-        filename,
-        fileUrl: this.fileUrl(props.s3Url, filename),
+        fileName,
+        fileUrl: this.fileUrl(props.s3Url, fileName),
         default: true,
         file: {},
       })
@@ -86,10 +92,8 @@ export default class DropzoneS3Uploader extends React.Component {
   setUploaderOptions = props => {
     this.setState({
       uploaderOptions: Object.assign({
-        signingUrl: '/s3/sign',
         s3path: '',
         contentDisposition: 'auto',
-        uploadRequestHeaders: {'x-amz-acl': 'public-read'},
         onFinishS3Put: this.handleFinish,
         onProgress: this.handleProgress,
         onError: this.handleError,
@@ -110,14 +114,15 @@ export default class DropzoneS3Uploader extends React.Component {
   handleFinish = (info, file) => {
     const uploadedFile = Object.assign({
       file,
-      fileUrl: this.fileUrl(this.props.s3Url, info.filename),
+      fileUrl: this.fileUrl(this.props.s3Url, info.fileName || info.filename),
     }, info)
 
     const uploadedFiles = this.state.uploadedFiles
     uploadedFiles.push(uploadedFile)
-    this.setState({uploadedFiles, error: null, progress: null}, () => {
-      this.props.onFinish && this.props.onFinish(uploadedFile)
-    })
+
+    this.props.onFinish && this.props.onFinish(uploadedFile)
+
+    this.setState({uploadedFiles, error: null, progress: null})
   }
 
   handleDrop = (files, rejectedFiles) => {
@@ -130,7 +135,7 @@ export default class DropzoneS3Uploader extends React.Component {
     this.props.onDrop && this.props.onDrop(files, rejectedFiles)
   }
 
-  fileUrl = (s3Url, filename) => `${s3Url.endsWith('/') ? s3Url.slice(0, -1) : s3Url}/${filename}`
+  fileUrl = (s3Url, fileName) => `${s3Url.endsWith('/') ? s3Url.slice(0, -1) : s3Url}/${fileName}`
 
   renderImage = ({uploadedFile}) => (<div className="rdsu-image"><img src={uploadedFile.fileUrl} /></div>)
 
@@ -167,17 +172,29 @@ export default class DropzoneS3Uploader extends React.Component {
     this.props.notDropzoneProps.forEach(prop => delete dropzoneProps[prop])
 
     let content = null
+    let outsideContent = null
+
     if (children) {
-      content = passChildrenProps ?
+      const childrenContent = passChildrenProps ?
         React.Children.map(children, child => React.cloneElement(child, childProps)) :
         this.props.children
+
+      if (this.props.placeChildrenOutsideDropArea) {
+        outsideContent = childrenContent
+
+        if (this.props.childrenDropzone) {
+          content = React.Children.map(this.props.childrenDropzone, child => React.cloneElement(child, childProps))
+        }
+      } else {
+        content = childrenContent
+      }
     }
     else {
       content = (
         <div>
           {uploadedFiles.map(uploadedFile => {
             const props = {
-              key: uploadedFile.filename,
+              key: uploadedFile.fileName,
               uploadedFile: uploadedFile,
               ...childProps,
             }
@@ -192,9 +209,12 @@ export default class DropzoneS3Uploader extends React.Component {
     }
 
     return (
-      <Dropzone ref={c => this._dropzone = c} onDrop={this.handleDrop} {...dropzoneProps}>
-        {content}
-      </Dropzone>
+      <div style={this.props.containerStyle}>
+        {outsideContent}
+        <Dropzone ref={c => this._dropzone = c} onDrop={this.handleDrop} {...dropzoneProps}>
+          {content}
+        </Dropzone>
+      </div>
     )
   }
 }
