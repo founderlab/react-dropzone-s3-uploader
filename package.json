@@ -21,7 +21,7 @@
   "dependencies": {
     "prop-types": "^15.5.8",
     "react-dropzone": "^4.0.0",
-    "react-s3-uploader": "4.5.0"
+    "react-s3-uploader": "4.8.0"
   },
   "devDependencies": {
     "babel": "^5.6.14",
