@@ -29,7 +29,7 @@ progressComponent | func              | Component used to render upload progress
 errorComponent    | func              | Component used to render an error
 children          | node \|\| func    | If present the above components will be ignored in favour of the children
 passChildrenProps | bool              | If true we pass the current state to children of this component. Default is true. Set to false to avoid React warnings about unused props.
-onDrop            | func              | Called when a file is dropped onto the uploader
+onDrop            | func              | Called when a file is dropped onto the uploader. If you set this, you may want to add `onDrop` to the `notDropzoneProps` property
 onError           | func              | Called when an upload error occurs
 onProgress        | func              | Called when a chunk has been uploaded
 onFinish          | func              | Called when a file has completed uploading. Called once per file if multi=true
