@@ -80,8 +80,8 @@ export default class DropzoneS3Uploader extends React.Component {
     this.state = {uploadedFiles}
   }
 
-  componentWillMount = () => this.setUploaderOptions(this.props)
-  componentWillReceiveProps = props => this.setUploaderOptions(props)
+   UNSAFE_componentWillMount = () => this.setUploaderOptions(this.props)
+   UNSAFE_componentWillReceiveProps = props => this.setUploaderOptions(props)
 
   setUploaderOptions = props => {
     this.setState({
